@@ -1,0 +1,7 @@
+# on linux put this to /etc/environment
+SPRING_DATASOURCE_URL="jdbc:mysql://localhost:3306/library?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC"
+SPRING_DATASOURCE_USERNAME="root"
+SPRING_DATASOURCE_PASSWORD="pawel1996"
+SPRING_DATASOURCE_DRIVER="com.mysql.jdbc.Driver"
+SPRING_EMAIL_USERNAME="pawel.library@gmail.com"
+SPRING_EMAIL_PASSWORD="pawel1996"
