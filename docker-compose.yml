@@ -14,7 +14,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=dbpassword
       - SPRING_DATASOURCE_DRIVER=com.mysql.jdbc.Driver
       - SPRING_EMAIL_USERNAME=pawel.library@gmail.com
-      - SPRING_EMAIL_PASSWORD=pawel1996
+      - SPRING_EMAIL_PASSWORD=${EMAIL_KEY}
     networks:
       - local
     ports:
