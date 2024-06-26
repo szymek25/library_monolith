@@ -1,0 +1,35 @@
+version: '3.3'
+
+services:
+  app:
+    image: 'library-system:latest'
+    build:
+      context: .
+    container_name: library-system
+    depends_on:
+      - mysqldb
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/library
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=dbpassword
+      - SPRING_DATASOURCE_DRIVER=com.mysql.jdbc.Driver
+      - SPRING_EMAIL_USERNAME=pawel.library@gmail.com
+      - SPRING_EMAIL_PASSWORD=pawel1996
+    networks:
+      - local
+    ports:
+      - '8080:8080'
+
+  mysqldb:
+    image: 'mysql:8.0'
+    container_name: db
+    environment:
+      - MYSQL_ROOT_PASSWORD=dbpassword
+      - MYSQL_DATABASE=library
+    ports:
+      - '3306:3306'
+    networks:
+      - local
+
+networks:
+  local:

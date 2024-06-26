@@ -118,9 +118,19 @@
       <artifactId>spring-boot-starter-mail</artifactId>
       <version>2.0.1.RELEASE</version>
     </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-tomcat</artifactId>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <build>
+    <finalName>library-system</finalName>
     <plugins>
       <plugin>
         <groupId>org.springframework.boot</groupId>
@@ -133,5 +143,7 @@
       </plugin>
     </plugins>
   </build>
+
+  <packaging>war</packaging>
 
 </project>
