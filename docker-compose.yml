@@ -32,6 +32,18 @@ services:
       - local
     volumes:
       - ./kube/db:/var/lib/mysql
+  keycloak:
+    image: quay.io/keycloak/keycloak
+    container_name: keycloak
+    command: -v start-dev --import-realm --hostname=localhost
+    ports:
+      - "8999:8080"
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+
+    volumes:
+      - ./keycloack:/opt/keycloak/data/import
 
 networks:
   local:
