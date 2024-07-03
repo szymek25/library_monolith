@@ -15,10 +15,12 @@ services:
       - SPRING_DATASOURCE_DRIVER=com.mysql.jdbc.Driver
       - SPRING_EMAIL_USERNAME=pawel.library@gmail.com
       - SPRING_EMAIL_PASSWORD=${EMAIL_KEY}
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
     networks:
       - local
     ports:
       - '8080:8080'
+      - '5005:5005'
 
   mysqldb:
     image: 'mysql:8.0'
