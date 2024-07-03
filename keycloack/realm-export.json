@@ -633,7 +633,9 @@
       "publicClient": true,
       "frontchannelLogout": false,
       "protocol": "openid-connect",
-      "attributes": {},
+      "attributes": {
+        "post.logout.redirect.uris": "+"
+      },
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": false,
       "nodeReRegistrationTimeout": 0,
@@ -672,7 +674,9 @@
       "publicClient": false,
       "frontchannelLogout": false,
       "protocol": "openid-connect",
-      "attributes": {},
+      "attributes": {
+        "post.logout.redirect.uris": "+"
+      },
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": false,
       "nodeReRegistrationTimeout": 0,
@@ -721,6 +725,7 @@
         "access.token.lifespan": "1800",
         "client.secret.creation.time": "1719909430",
         "client.introspection.response.allow.jwt.claim.enabled": "false",
+        "post.logout.redirect.uris": "+",
         "oauth2.device.authorization.grant.enabled": "false",
         "use.jwks.url": "false",
         "backchannel.logout.revoke.offline.tokens": "false",
@@ -747,8 +752,9 @@
           "consentRequired": false,
           "config": {
             "user.session.note": "client_id",
-            "id.token.claim": "true",
             "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "client_id",
             "jsonType.label": "String"
@@ -763,6 +769,7 @@
           "config": {
             "introspection.token.claim": "true",
             "multivalued": "true",
+            "userinfo.token.claim": "true",
             "user.attribute": "foo",
             "id.token.claim": "true",
             "access.token.claim": "true",
@@ -778,8 +785,9 @@
           "consentRequired": false,
           "config": {
             "user.session.note": "clientHost",
-            "id.token.claim": "true",
             "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "clientHost",
             "jsonType.label": "String"
@@ -793,8 +801,9 @@
           "consentRequired": false,
           "config": {
             "user.session.note": "clientAddress",
-            "id.token.claim": "true",
             "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "clientAddress",
             "jsonType.label": "String"
@@ -837,7 +846,9 @@
       "publicClient": false,
       "frontchannelLogout": false,
       "protocol": "openid-connect",
-      "attributes": {},
+      "attributes": {
+        "post.logout.redirect.uris": "+"
+      },
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": false,
       "nodeReRegistrationTimeout": 0,
@@ -943,7 +954,8 @@
           "config": {
             "id.token.claim": "true",
             "introspection.token.claim": "true",
-            "access.token.claim": "true"
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
           }
         }
       ]
@@ -969,7 +981,7 @@
             "user.attribute.formatted": "formatted",
             "user.attribute.country": "country",
             "introspection.token.claim": "true",
-            "user.attribute.postal_code": "postal_code",
+            "user.attribute.postalCode": "postalCode",
             "userinfo.token.claim": "true",
             "user.attribute.street": "street",
             "id.token.claim": "true",
@@ -1053,6 +1065,7 @@
           "config": {
             "introspection.token.claim": "true",
             "multivalued": "true",
+            "userinfo.token.claim": "true",
             "user.attribute": "foo",
             "id.token.claim": "true",
             "access.token.claim": "true",
@@ -1371,8 +1384,9 @@
           "consentRequired": false,
           "config": {
             "user.session.note": "AUTH_TIME",
-            "id.token.claim": "true",
             "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "auth_time",
             "jsonType.label": "long"
@@ -1599,14 +1613,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
+            "saml-role-list-mapper",
             "saml-user-attribute-mapper",
-            "oidc-full-name-mapper",
-            "oidc-address-mapper",
             "oidc-sha256-pairwise-sub-mapper",
             "oidc-usermodel-property-mapper",
-            "saml-user-property-mapper",
-            "saml-role-list-mapper",
-            "oidc-usermodel-attribute-mapper"
+            "oidc-full-name-mapper",
+            "oidc-address-mapper",
+            "oidc-usermodel-attribute-mapper",
+            "saml-user-property-mapper"
           ]
         }
       },
@@ -1653,14 +1667,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "saml-user-property-mapper",
             "oidc-full-name-mapper",
-            "oidc-usermodel-attribute-mapper",
-            "oidc-address-mapper",
             "saml-user-attribute-mapper",
             "oidc-usermodel-property-mapper",
+            "saml-role-list-mapper",
+            "oidc-usermodel-attribute-mapper",
             "oidc-sha256-pairwise-sub-mapper",
-            "saml-role-list-mapper"
+            "oidc-address-mapper",
+            "saml-user-property-mapper"
           ]
         }
       },
@@ -1671,6 +1685,18 @@
         "subType": "anonymous",
         "subComponents": {},
         "config": {}
+      }
+    ],
+    "org.keycloak.userprofile.UserProfileProvider": [
+      {
+        "id": "292710ab-a7cc-4818-a6a9-4a560ab12be8",
+        "providerId": "declarative-user-profile",
+        "subComponents": {},
+        "config": {
+          "kc.user.profile.config": [
+            "{\"attributes\":[{\"name\":\"username\",\"displayName\":\"${username}\",\"validations\":{\"length\":{\"min\":3,\"max\":255},\"username-prohibited-characters\":{},\"up-username-not-idn-homograph\":{}},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"email\",\"displayName\":\"${email}\",\"validations\":{\"email\":{},\"length\":{\"max\":255}},\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"firstName\",\"displayName\":\"${firstName}\",\"validations\":{\"length\":{\"max\":255},\"person-name-prohibited-characters\":{}},\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"lastName\",\"displayName\":\"${lastName}\",\"validations\":{\"length\":{\"max\":255},\"person-name-prohibited-characters\":{}},\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"addressLine1\",\"displayName\":\"Address Line 1\",\"validations\":{},\"annotations\":{},\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\"],\"edit\":[\"admin\"]},\"multivalued\":false},{\"name\":\"dayOfBirth\",\"displayName\":\"Day Of Birth\",\"validations\":{\"iso-date\":{}},\"annotations\":{},\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\"],\"edit\":[\"admin\"]},\"multivalued\":false},{\"name\":\"phone\",\"displayName\":\"Phone\",\"validations\":{},\"annotations\":{},\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\"],\"edit\":[\"admin\"]},\"multivalued\":false},{\"name\":\"postalCode\",\"displayName\":\"Postal Code\",\"validations\":{},\"annotations\":{},\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\"],\"edit\":[\"admin\"]},\"multivalued\":false},{\"name\":\"town\",\"displayName\":\"Town\",\"validations\":{},\"annotations\":{},\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\"],\"edit\":[\"admin\"]},\"multivalued\":false}],\"groups\":[{\"name\":\"user-metadata\",\"displayHeader\":\"User metadata\",\"displayDescription\":\"Attributes, which refer to user metadata\"}]}"
+          ]
+        }
       }
     ],
     "org.keycloak.keys.KeyProvider": [
@@ -2375,13 +2401,18 @@
   "firstBrokerLoginFlow": "first broker login",
   "attributes": {
     "cibaBackchannelTokenDeliveryMode": "poll",
-    "cibaExpiresIn": "120",
     "cibaAuthRequestedUserHint": "login_hint",
-    "oauth2DeviceCodeLifespan": "600",
+    "clientOfflineSessionMaxLifespan": "0",
     "oauth2DevicePollingInterval": "5",
-    "parRequestUriLifespan": "60",
+    "clientSessionIdleTimeout": "0",
+    "clientOfflineSessionIdleTimeout": "0",
     "cibaInterval": "5",
-    "realmReusableOtpCode": "false"
+    "realmReusableOtpCode": "false",
+    "cibaExpiresIn": "120",
+    "oauth2DeviceCodeLifespan": "600",
+    "parRequestUriLifespan": "60",
+    "clientSessionMaxLifespan": "0",
+    "organizationsEnabled": "false"
   },
   "keycloakVersion": "25.0.1",
   "userManagedAccessAllowed": false,
@@ -2391,5 +2422,223 @@
   },
   "clientPolicies": {
     "policies": []
-  }
+  },
+  "users": [
+    {
+      "username": "admin@biblioteka.com",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Admin",
+      "lastName": "admin",
+      "email": "admin@biblioteka.com",
+      "attributes": {
+        "addressLine1": "Biblioteczna",
+        "dayOfBirth": "1996-01-19",
+        "phone": "512155211",
+        "postalCode": "41-800",
+        "town": "Zabrze"
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "start1234"
+        }
+      ],
+      "groups": [
+        "/ROLE_EMPLOYEE"
+      ]
+    },
+    {
+      "username": "rudziak555@gmail.com",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Ewa",
+      "lastName": "Podstada",
+      "email": "rudziak555@gmail.com",
+      "attributes": {
+        "addressLine1": "Cisowa 8B/8",
+        "dayOfBirth": "1998-12-20",
+        "phone": "122222222",
+        "postalCode": "41-800",
+        "town": "Zabrze"
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "start1234"
+        }
+      ],
+      "groups": [
+        "/ROLE_USER"
+      ]
+    },
+    {
+      "username": "jan@biblioteka.com",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Jan",
+      "lastName": "Kowalski",
+      "email": "jan@biblioteka.com",
+      "attributes": {
+        "addressLine1": "Jagodowa",
+        "dayOfBirth": "1983-02-18",
+        "phone": "721507857",
+        "postalCode": "44-100",
+        "town": "Gliwice"
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "start1234"
+        }
+      ],
+      "groups": [
+        "/ROLE_EMPLOYEE"
+      ]
+    },
+    {
+      "username": "andrzej@biblioteka.com",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Andrzej",
+      "lastName": "Cuber",
+      "email": "andrzej@biblioteka.com",
+      "attributes": {
+        "addressLine1": "Porzeczkowa 2/5",
+        "dayOfBirth": "1977-04-12",
+        "phone": "721573821",
+        "postalCode": "41-800",
+        "town": "Zabrze"
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "start1234"
+        }
+      ],
+      "groups": [
+        "/ROLE_EMPLOYEE"
+      ]
+    },
+    {
+      "username": "paulina172@onet.pl",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Paulina",
+      "lastName": "Stefańczyk",
+      "email": "paulina172@onet.pl",
+      "attributes": {
+        "addressLine1": "Malinowa 8/5",
+        "dayOfBirth": "1995-06-20",
+        "phone": "",
+        "postalCode": "41-800",
+        "town": "Zabrze"
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "start1234"
+        }
+      ],
+      "groups": [
+        "/ROLE_USER"
+      ]
+    },
+    {
+      "username": "stefan73@gmail.com",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Stefan",
+      "lastName": "Zatylny",
+      "email": "stefan73@gmail.com",
+      "attributes": {
+        "addressLine1": "Wolnośc 323/7",
+        "dayOfBirth": "1973-08-15",
+        "phone": "",
+        "postalCode": "41-800",
+        "town": "Zabrze"
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "start1234"
+        }
+      ],
+      "groups": [
+        "/ROLE_USER"
+      ]
+    },
+    {
+      "username": "artur55555@o2.pl",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Artur",
+      "lastName": "Kopek",
+      "email": "artur55555@o2.pl",
+      "attributes": {
+        "addressLine1": "Brzoskwiniowa 14/3",
+        "dayOfBirth": "1999-09-18",
+        "phone": "",
+        "postalCode": "41-800",
+        "town": "Zabrze"
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "start1234"
+        }
+      ],
+      "groups": [
+        "/ROLE_USER"
+      ]
+    },
+    {
+      "username": "porzeczka721@wp.pl",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Celina",
+      "lastName": "Czerwony",
+      "email": "porzeczka721@wp.pl",
+      "attributes": {
+        "addressLine1": "Arbuzowa 15/9",
+        "dayOfBirth": "1949-01-19",
+        "phone": "",
+        "postalCode": "41-800",
+        "town": "Zabrze"
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "start1234"
+        }
+      ],
+      "groups": [
+        "/ROLE_USER"
+      ]
+    },
+    {
+      "username": "manager@biblioteka.com",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "manager",
+      "lastName": "manager",
+      "email": "manager@biblioteka.com",
+      "attributes": {
+        "addressLine1": "Biblioteczna",
+        "dayOfBirth": "1996-01-19",
+        "phone": "512155211",
+        "postalCode": "41-800",
+        "town": "Zabrze"
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "start1234"
+        }
+      ],
+      "groups": [
+        "/ROLE_MANAGER"
+      ]
+    }
+  ]
 }
