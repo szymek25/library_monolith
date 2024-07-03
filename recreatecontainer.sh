@@ -1,3 +1,3 @@
 docker remove library-system
-mvn package
+mvn clean package -DskipTests
 docker build -t szymek25/library-system .

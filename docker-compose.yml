@@ -2,7 +2,6 @@ version: '3.3'
 
 services:
   app:
-    image: 'library-system:latest'
     build:
       context: .
     container_name: library-system
