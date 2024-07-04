@@ -18,6 +18,7 @@ import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationC
 import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import pl.szymanski.springfrontend.oauth2.CustomOAuth2AuthorizationCodeGrantRequestEntityConverter;
+import pl.szymanski.springfrontend.oauth2.KeycloakLogoutHandler;
 
 import javax.annotation.Resource;
 import java.util.Collection;
@@ -34,6 +35,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private static final String ROLES = "roles";
 	@Resource(name = "userService")
 	private UserDetailsService userDetailsService;
+
+	@Resource
+	private KeycloakLogoutHandler keycloakLogoutHandler;
 
 	@Override
 	@Bean
@@ -73,7 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.successHandler(myAuthenticationSuccessHandler())
 				.failureUrl("/login?error=true")
 				.and()
-				.logout()
+				.logout().addLogoutHandler(keycloakLogoutHandler).logoutSuccessUrl("/login")
 				.logoutUrl("/perform_logout")
 				.deleteCookies("JSESSIONID");
 	}
