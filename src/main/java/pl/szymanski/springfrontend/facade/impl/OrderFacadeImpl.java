@@ -63,6 +63,13 @@ public class OrderFacadeImpl implements OrderFacade {
   }
 
   @Override
+  public Page<OrderDTO> getAllPaginatedForCurrentUser(Pageable pageable) {
+    User user = userService.getCurrentUser();
+    Page<BookOrder> orders = orderService.getAllPaginatedForUser(pageable, user.getId());
+    return convertToPageWithOrderDTO(orders);
+  }
+
+  @Override
   public OrderDTO cancelOrder(int orderId) throws OrderException {
     return new OrderDTO(orderService.cancelOrder(orderId));
   }

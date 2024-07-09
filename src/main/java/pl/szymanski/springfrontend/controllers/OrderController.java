@@ -104,14 +104,11 @@ public class OrderController extends AbstractPageController {
   @RequestMapping(value = "/list/user", method = RequestMethod.GET)
   public String userOrders(@RequestParam("page") final Optional<Integer> page,
       final Model model) {
-    final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    final User authToken = (User) auth.getPrincipal();
-
     final Integer currentPage = page.orElse(0);
     final PageRequest pageable = new PageRequest(currentPage,
         ApplicationConstants.DEFAULT_PAGE_SIZE);
     final Page<OrderDTO> paginatedOrders = orderFacade
-        .getAllPaginatedForUser(pageable, userFacade.getUserIdByEmail(authToken.getUsername()));
+        .getAllPaginatedForCurrentUser(pageable);
 
     addPaginationResult(currentPage, "orders", paginatedOrders, model);
     return "orders";
