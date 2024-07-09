@@ -8,9 +8,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Component;
 import pl.szymanski.springfrontend.model.User;
+import pl.szymanski.springfrontend.service.RoleService;
 import pl.szymanski.springfrontend.service.UserService;
 
 import java.sql.Date;
+import java.util.Collection;
 import java.util.Map;
 
 @Component
@@ -28,6 +30,9 @@ public class AuthenticationSuccessEventListener implements ApplicationListener<I
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private RoleService roleService;
 
 	@Override
 	public void onApplicationEvent(final InteractiveAuthenticationSuccessEvent event) {
@@ -60,6 +65,19 @@ public class AuthenticationSuccessEventListener implements ApplicationListener<I
 		final String birthdate = getStringAttribute(attributes, BIRTHDATE);
 		if (StringUtils.isNotEmpty(birthdate)) {
 			user.setDayOfBirth(Date.valueOf(birthdate));
+		}
+		mapRole(user, attributes);
+	}
+
+	private void mapRole(User user, Map<String, Object> attributes) {
+		if (attributes.containsKey("roles")) {
+			final Collection<String> roles = (Collection<String>) attributes.get("roles");
+			if (roles.size()==1 ) {
+				String role = roles.stream().iterator().next();
+				user.setRole(roleService.getByName(role));
+			} else {
+				throw new IllegalArgumentException("User can have only one role");
+			}
 		}
 	}
 
