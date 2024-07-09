@@ -126,4 +126,10 @@ public class UserFacadeImpl implements UserFacade {
   public boolean isCurrentUserManager() {
     return userService.isCurrentUserManager();
   }
+
+  @Override
+  public boolean isLoggedIn() {
+    User currentUser = userService.getCurrentUser();
+    return currentUser != null;
+  }
 }

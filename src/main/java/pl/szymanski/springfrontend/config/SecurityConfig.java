@@ -68,16 +68,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.csrf().disable()
 				.authorizeRequests()
 				.antMatchers("/anonymous*").anonymous()
-				.antMatchers("/webjars/**", "/css/**", "/js/**", "/actuator/**").permitAll()
+				.antMatchers("/webjars/**", "/css/**", "/js/**", "/actuator/**", "/").permitAll()
 				.anyRequest().authenticated();
 
 		http.oauth2ResourceServer().jwt();
 		http.oauth2Login().tokenEndpoint().accessTokenResponseClient(customAccessTokenRequestClient())
 				.and()
 				.successHandler(myAuthenticationSuccessHandler())
-				.failureUrl("/login?error=true")
+				.failureUrl("/?error=true")
 				.and()
-				.logout().addLogoutHandler(keycloakLogoutHandler).logoutSuccessUrl("/login")
+				.logout().addLogoutHandler(keycloakLogoutHandler).logoutSuccessUrl("/")
 				.logoutUrl("/perform_logout")
 				.deleteCookies("JSESSIONID");
 	}

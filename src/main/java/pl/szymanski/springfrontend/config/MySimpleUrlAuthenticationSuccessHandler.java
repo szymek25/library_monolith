@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import pl.szymanski.springfrontend.constants.ApplicationConstants;
 import pl.szymanski.springfrontend.model.Department;
 import pl.szymanski.springfrontend.model.User;
+import pl.szymanski.springfrontend.service.KeyCloakService;
 import pl.szymanski.springfrontend.service.UserService;
 
 public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
@@ -32,6 +33,9 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
 
   @Resource
   private UserService userService;
+
+  @Resource
+  private KeyCloakService keyCloakService;
 
   @Override
   public void onAuthenticationSuccess(final HttpServletRequest request,
@@ -81,12 +85,12 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
       logger.warn(
           "Tried to login into department with ip restriction on address: {} from address: {}",
           department.getIpAddress(), webUtils.getClientIp());
-      SecurityContextHolder.clearContext();
-      return "/login?ipRestrict=true";
+      keyCloakService.logoutFromKeyCloak();
+      return "/?ipRestrict=true";
     } else if (isEmployee && department == null) {
-      SecurityContextHolder.clearContext();
+      keyCloakService.logoutFromKeyCloak();
       logger.error("Employee {} has no department assigned", user.getEmail());
-      return "/login?emplNonAssigned=true";
+      return "/?emplNonAssigned=true";
     }
     if (isManager) {
       return "/departments/list";
