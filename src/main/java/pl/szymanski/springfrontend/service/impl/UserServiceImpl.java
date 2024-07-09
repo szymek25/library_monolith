@@ -148,6 +148,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     return userDao.findByEmail(username);
   }
 
+  @Override
+  public void save(User user) {
+    userDao.save(user);
+  }
+
   private void updateUser(UserDTO updateUserDto, User user) throws Exception {
     user.setName(updateUserDto.getName());
     user.setLastName(updateUserDto.getLastName());
