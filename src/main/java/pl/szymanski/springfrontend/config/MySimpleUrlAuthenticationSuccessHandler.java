@@ -85,6 +85,7 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
       return "/login?ipRestrict=true";
     } else if (isEmployee && department == null) {
       SecurityContextHolder.clearContext();
+      logger.error("Employee {} has no department assigned", user.getEmail());
       return "/login?emplNonAssigned=true";
     }
     if (isManager) {
