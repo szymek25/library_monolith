@@ -55,3 +55,4 @@ keycloak:
   serverLocalUrl: http://localhost:8080
   baseUrl: ${keycloak.serverUrl}/realms/${keycloak.realm}
   localHostBaseUrl: ${keycloak.serverLocalUrl}/realms/${keycloak.realm}
+  usersEndpoint: ${keycloak.serverUrl}/admin/realms/${keycloak.realm}/users/

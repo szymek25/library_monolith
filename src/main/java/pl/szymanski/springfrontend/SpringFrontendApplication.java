@@ -9,10 +9,12 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import pl.szymanski.springfrontend.oauth2.RestTemplateInterceptor;
 
 @SpringBootApplication
 @EnableScheduling
@@ -44,9 +46,18 @@ public class SpringFrontendApplication extends SpringBootServletInitializer {
   }
 
 	@Bean
-	public RestTemplate restTemplate() {
-	  return new RestTemplate();
+	public RestTemplate restTemplate(OAuth2AuthorizedClientService clientService) {
+      RestTemplate restTemplate = new RestTemplate();
+      restTemplate.getInterceptors().add(restTemplateInterceptor(clientService));
+      return restTemplate;
 	}
+
+
+    @Bean public RestTemplateInterceptor restTemplateInterceptor(OAuth2AuthorizedClientService clientService) {
+      return new RestTemplateInterceptor(clientService);
+    }
+
+
   @Override
   protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
     return builder.sources(SpringFrontendApplication.class);

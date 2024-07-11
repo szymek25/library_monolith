@@ -7,6 +7,7 @@ import org.springframework.security.authentication.event.InteractiveAuthenticati
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Component;
+import pl.szymanski.springfrontend.constants.ApplicationConstants;
 import pl.szymanski.springfrontend.model.User;
 import pl.szymanski.springfrontend.service.RoleService;
 import pl.szymanski.springfrontend.service.UserService;
@@ -15,18 +16,11 @@ import java.sql.Date;
 import java.util.Collection;
 import java.util.Map;
 
+
 @Component
 public class AuthenticationSuccessEventListener implements ApplicationListener<InteractiveAuthenticationSuccessEvent> {
 
-	private static final String EMAIL = "email";
-	private static final String FIRST_NAME = "firstName";
-	private static final String LAST_NAME = "lastName";
-	private static final String ADDRESS_LINE_1 = "addressLine1";
-	private static final String PHONE = "phone";
-	private static final String BIRTHDATE = "birthdate";
-	private static final String TOWN = "town";
-	private static final String POSTAL_CODE = "postalCode";
-	private static final String UUID = "sub";
+
 
 	@Autowired
 	private UserService userService;
@@ -43,7 +37,7 @@ public class AuthenticationSuccessEventListener implements ApplicationListener<I
 		final Authentication authentication = event.getAuthentication();
 		final OidcUser user = (OidcUser) authentication.getPrincipal();
 		final Map<String, Object> attributes = user.getAttributes();
-		final String email = getStringAttribute(attributes, EMAIL);
+		final String email = getStringAttribute(attributes, ApplicationConstants.KeyCloak.EMAIL);
 		User userByEmail = userService.getUserByEmail(email);
 		if (userByEmail == null) {
 			userByEmail = new User();
@@ -54,15 +48,15 @@ public class AuthenticationSuccessEventListener implements ApplicationListener<I
 	}
 
 	private void mapUserAttributes(final User user, final Map<String, Object> attributes) {
-		user.setEmail(getStringAttribute(attributes, EMAIL));
-		user.setName(getStringAttribute(attributes, FIRST_NAME));
-		user.setLastName(getStringAttribute(attributes, LAST_NAME));
-		user.setAddressLine1(getStringAttribute(attributes, ADDRESS_LINE_1));
-		user.setPhone(getStringAttribute(attributes, PHONE));
-		user.setTown(getStringAttribute(attributes, TOWN));
-		user.setPostalCode(getStringAttribute(attributes, POSTAL_CODE));
-		user.setUuid(getStringAttribute(attributes, UUID));
-		final String birthdate = getStringAttribute(attributes, BIRTHDATE);
+		user.setEmail(getStringAttribute(attributes, ApplicationConstants.KeyCloak.EMAIL));
+		user.setName(getStringAttribute(attributes, ApplicationConstants.KeyCloak.FIRST_NAME));
+		user.setLastName(getStringAttribute(attributes, ApplicationConstants.KeyCloak.LAST_NAME));
+		user.setAddressLine1(getStringAttribute(attributes, ApplicationConstants.KeyCloak.ADDRESS_LINE_1));
+		user.setPhone(getStringAttribute(attributes, ApplicationConstants.KeyCloak.PHONE));
+		user.setTown(getStringAttribute(attributes, ApplicationConstants.KeyCloak.TOWN));
+		user.setPostalCode(getStringAttribute(attributes, ApplicationConstants.KeyCloak.POSTAL_CODE));
+		user.setUuid(getStringAttribute(attributes, ApplicationConstants.KeyCloak.UUID));
+		final String birthdate = getStringAttribute(attributes, ApplicationConstants.KeyCloak.BIRTHDATE);
 		if (StringUtils.isNotEmpty(birthdate)) {
 			user.setDayOfBirth(Date.valueOf(birthdate));
 		}

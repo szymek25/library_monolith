@@ -34,7 +34,7 @@
   "loginWithEmailAllowed": true,
   "duplicateEmailsAllowed": false,
   "resetPasswordAllowed": false,
-  "editUsernameAllowed": false,
+  "editUsernameAllowed": true,
   "bruteForceProtected": false,
   "permanentLockout": false,
   "maxTemporaryLockouts": 0,
@@ -421,7 +421,11 @@
       "subGroups": [],
       "attributes": {},
       "realmRoles": [],
-      "clientRoles": {}
+      "clientRoles": {
+        "realm-management": [
+          "manage-users"
+        ]
+      }
     },
     {
       "id": "ca704dd5-067d-4847-a9b2-06c91c4b8744",
@@ -430,7 +434,11 @@
       "subGroups": [],
       "attributes": {},
       "realmRoles": [],
-      "clientRoles": {}
+      "clientRoles": {
+        "realm-management": [
+          "manage-users"
+        ]
+      }
     },
     {
       "id": "f376a0e2-d26c-4c66-beb9-e5d5d63cd687",
@@ -843,7 +851,7 @@
             "id.token.claim": "true",
             "lightweight.claim": "false",
             "access.token.claim": "true",
-            "claim.name": "birthdate",
+            "claim.name": "dayOfBirth",
             "jsonType.label": "String"
           }
         },
