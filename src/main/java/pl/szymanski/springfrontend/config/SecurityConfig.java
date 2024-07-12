@@ -1,6 +1,7 @@
 package pl.szymanski.springfrontend.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -38,6 +39,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Resource
 	private KeycloakLogoutHandler keycloakLogoutHandler;
+
+	@Value("${keycloak.clientId}")
+	private String clientId;
 
 	@Override
 	@Bean
@@ -85,10 +89,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public DefaultAuthorizationCodeTokenResponseClient customAccessTokenRequestClient() {
 		DefaultAuthorizationCodeTokenResponseClient customAccessTokenRequestClient = new DefaultAuthorizationCodeTokenResponseClient();
-		customAccessTokenRequestClient.setRequestEntityConverter(new CustomOAuth2AuthorizationCodeGrantRequestEntityConverter());
+		customAccessTokenRequestClient.setRequestEntityConverter(customOAuth2AuthorizationCodeGrantRequestEntityConverter() );
 		return customAccessTokenRequestClient;
 	}
 
+	@Bean
+	public CustomOAuth2AuthorizationCodeGrantRequestEntityConverter customOAuth2AuthorizationCodeGrantRequestEntityConverter() {
+		return new CustomOAuth2AuthorizationCodeGrantRequestEntityConverter(clientId);
+	}
 	@Bean
 	public GrantedAuthoritiesMapper userAuthoritiesMapperForKeycloak() {
 		return authorities -> {

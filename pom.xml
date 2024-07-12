@@ -147,7 +147,6 @@
   </dependencies>
 
   <build>
-<!--    <finalName>library-system</finalName>-->
     <plugins>
       <plugin>
         <groupId>org.springframework.boot</groupId>
