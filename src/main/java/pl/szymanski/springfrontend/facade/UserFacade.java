@@ -32,4 +32,6 @@ public interface UserFacade {
   Integer getUserIdByEmail(String email);
 
   boolean isCurrentUserManager();
+
+  boolean isLoggedIn();
 }

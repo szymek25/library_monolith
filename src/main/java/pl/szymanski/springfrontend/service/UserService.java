@@ -35,4 +35,6 @@ public interface UserService {
   boolean isCurrentUserManager();
 
   User getCurrentUser();
+
+  void save(User user);
 }

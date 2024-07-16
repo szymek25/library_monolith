@@ -15,6 +15,8 @@ public interface OrderFacade {
 
   Page<OrderDTO> getAllPaginatedForUser(Pageable pageable, int userId);
 
+  Page<OrderDTO> getAllPaginatedForCurrentUser(Pageable pageable);
+
   OrderDTO cancelOrder(int orderId) throws OrderException;
 
   OrderDTO confirmOrder(int orderId) throws OrderException;

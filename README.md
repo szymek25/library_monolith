@@ -12,3 +12,10 @@ For training purposes I have created local k8s cluster using minikube. To deploy
 3. In second terminal execute sudo minikube tunnel
 
 App should be accessible in browser under http://localhost
+
+## Migration steps
+Here you can find steps which I have taken to migrate monolithic app into microservices architecture:
+1. Introduced docker and kubernetes configs for easier development and deployment
+2. Installed keycloak as new authorization server
+3. Migrated authentication from monolithic app into keycloak
+4. Started migrating other functionalities related with user management. After some time turned out that it requires introducing some additional logic in monolithic app, so I decided to create new microservice for user management 

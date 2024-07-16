@@ -88,6 +88,13 @@ public class RentFacadeImpl implements RentFacade {
   }
 
   @Override
+  public Page<RentDTO> getAllPaginatedForCurrentUser(Pageable pageable) {
+    final User currentUser = userService.getCurrentUser();
+    Page<Rent> rents = rentService.getAllPaginatedForUser(pageable, currentUser.getId());
+    return convertToPageWithRentDTO(rents);
+  }
+
+  @Override
   public Page<RentDTO> getAllPaginatedForBookEntry(final Pageable pageable, final int bookEntryId) {
     final Page<Rent> rents = rentService.getAllPaginatedForBookEntry(pageable, bookEntryId);
     return convertToPageWithRentDTO(rents);

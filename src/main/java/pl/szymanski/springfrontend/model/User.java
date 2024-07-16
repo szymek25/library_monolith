@@ -46,6 +46,8 @@ public class User {
 
   @Column
   private String postalCode;
+  @Column
+  private String uuid;
 
 
   @OneToOne(fetch = FetchType.EAGER)
@@ -148,5 +150,13 @@ public class User {
 
   public void setDepartment(Department department) {
     this.department = department;
+  }
+
+  public String getUuid() {
+    return uuid;
+  }
+
+  public void setUuid(String uuid) {
+    this.uuid = uuid;
   }
 }

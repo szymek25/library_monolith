@@ -15,6 +15,8 @@ public interface RentFacade {
 
   Page<RentDTO> getAllPaginatedForUser(Pageable pageable, int userId);
 
+  Page<RentDTO> getAllPaginatedForCurrentUser(Pageable pageable);
+
   Page<RentDTO> getAllPaginatedForBookEntry(Pageable pageable, int bookEntryId);
 
   String endRent(int rentId, String physicalState);
