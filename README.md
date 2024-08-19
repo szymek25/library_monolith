@@ -19,3 +19,9 @@ Here you can find steps which I have taken to migrate monolithic app into micros
 2. Installed keycloak as new authorization server
 3. Migrated authentication from monolithic app into keycloak
 4. Started migrating other functionalities related with user management. After some time turned out that it requires introducing some additional logic in monolithic app, so I decided to create new microservice for user management 
+5. Introduced api-gateway component
+
+
+## Other repositories in project
+1. library-api-gateway - https://github.com/szymek25/library-api-gateway
+2. 
