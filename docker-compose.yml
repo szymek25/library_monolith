@@ -48,9 +48,15 @@ services:
     networks:
       - local
   apigateway:
-    image: 'szymek25/library-api-gateway'
+    image: 'szymek25/library-api-gateway:latest'
     ports:
       - '8081:8081'
+    networks:
+      - local
+  user-service:
+    image: 'szymek25/library-user-service:latest'
+    ports:
+      - '8082:8082'
     networks:
       - local
 networks:
