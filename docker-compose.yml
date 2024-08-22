@@ -53,6 +53,8 @@ services:
       - '8081:8081'
     networks:
       - local
+    environment:
+      USER_SERVICE_ROUTE: http://user-service:8082
   user-service:
     image: 'szymek25/library-user-service:latest'
     ports:
