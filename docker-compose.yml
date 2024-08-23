@@ -59,6 +59,7 @@ services:
     image: 'szymek25/library-user-service:latest'
     ports:
       - '8082:8082'
+      - '50005:50005'
     networks:
       - local
 networks:
