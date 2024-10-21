@@ -24,4 +24,4 @@ Here you can find steps which I have taken to migrate monolithic app into micros
 
 ## Other repositories in project
 1. library-api-gateway - https://github.com/szymek25/library-api-gateway
-2. 
+2. user-service - https://github.com/szymek25/user-service
