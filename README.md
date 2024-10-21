@@ -33,5 +33,5 @@ Here you can find steps which I have taken to migrate monolithic app into micros
 4. Introduce service for depertments and book
 5. Introduce service for orders
 6. Contract testing
-7. Monitoring on ELK stack ir some other
+7. Monitoring on ELK stack or some other
 8. Deploy into cloud
