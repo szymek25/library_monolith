@@ -25,3 +25,13 @@ Here you can find steps which I have taken to migrate monolithic app into micros
 ## Other repositories in project
 1. library-api-gateway - https://github.com/szymek25/library-api-gateway
 2. user-service - https://github.com/szymek25/user-service
+
+## Next steps
+1. Finish implementation of user-service
+2. Introduce kafka for async communication
+3. Introduce service-discovery
+4. Introduce service for depertments and book
+5. Introduce service for orders
+6. Contract testing
+7. Monitoring on ELK stack ir some other
+8. Deploy into cloud
