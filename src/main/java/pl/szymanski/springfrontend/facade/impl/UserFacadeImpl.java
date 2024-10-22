@@ -1,12 +1,15 @@
 package pl.szymanski.springfrontend.facade.impl;
 
-import java.sql.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import pl.szymanski.springfrontend.api.userservice.converter.APIResponseConverter;
+import pl.szymanski.springfrontend.api.userservice.dto.UserAPIResponseDTO;
+import pl.szymanski.springfrontend.api.userservice.UserServiceApi;
 import pl.szymanski.springfrontend.dtos.UserDTO;
 import pl.szymanski.springfrontend.facade.UserFacade;
 import pl.szymanski.springfrontend.forms.AddUserForm;
@@ -14,6 +17,8 @@ import pl.szymanski.springfrontend.forms.EditUserForm;
 import pl.szymanski.springfrontend.forms.RegisterForm;
 import pl.szymanski.springfrontend.model.User;
 import pl.szymanski.springfrontend.service.UserService;
+
+import java.sql.Date;
 
 @Component
 public class UserFacadeImpl implements UserFacade {
@@ -23,6 +28,15 @@ public class UserFacadeImpl implements UserFacade {
   @Autowired
   private UserService userService;
 
+  @Autowired
+  private UserServiceApi userServiceApi;
+
+  @Value("${library.user-service-enabled}")
+  private boolean userServiceEnabled;
+
+  @Autowired
+  private APIResponseConverter<UserAPIResponseDTO, UserDTO> userAPIDTOResponseConverter;
+
   @Override
   public Page<UserDTO> getPaginatedUser(Pageable pageable) {
     Page<User> allUsers = userService.findAllPaginated(pageable);
@@ -31,8 +45,13 @@ public class UserFacadeImpl implements UserFacade {
 
   @Override
   public Page<UserDTO> getPaginatedLibraryCustomers(Pageable pageable) {
-    final Page<User> allLibraryCustomers = userService.findAllLibraryCustomers(pageable);
-    return allLibraryCustomers != null ? allLibraryCustomers.map(UserDTO::new) : null;
+    if(userServiceEnabled) {
+      UserAPIResponseDTO libraryCustomers = userServiceApi.getLibraryCustomers(pageable.getPageNumber(), pageable.getPageSize());
+      return userAPIDTOResponseConverter.convertToDTO(libraryCustomers);
+    } else {
+      final Page<User> allLibraryCustomers = userService.findAllLibraryCustomers(pageable);
+      return allLibraryCustomers != null ? allLibraryCustomers.map(UserDTO::new) : null;
+    }
   }
 
   @Override

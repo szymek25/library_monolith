@@ -22,4 +22,10 @@ public class ApplicationConstants {
     public static final String POSTAL_CODE = "postalCode";
     public static final String UUID = "sub";
   }
+
+  public class UserService {
+    public static final String LIBRARY_CUSTOMERS_ENDPOINT = "/users/customers";
+    public static final String CURRENT_PAGE_PARAM = "currentPage";
+    public static final String PAGE_SIZE_PARAM = "pageSize";
+  }
 }

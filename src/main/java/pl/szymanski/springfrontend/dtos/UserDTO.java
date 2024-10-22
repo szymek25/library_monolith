@@ -31,6 +31,10 @@ public class UserDTO {
 
   private String accountType;
 
+  private String keycloakId;
+
+  private String keycloakRoleId;
+
   public UserDTO(User user) {
     this.id = user.getId();
     this.email = user.getEmail();
@@ -146,5 +150,21 @@ public class UserDTO {
 
   public void setAccountType(String accountType) {
     this.accountType = accountType;
+  }
+
+  public String getKeycloakId() {
+    return keycloakId;
+  }
+
+  public void setKeycloakId(String keycloakId) {
+    this.keycloakId = keycloakId;
+  }
+
+  public String getKeycloakRoleId() {
+    return keycloakRoleId;
+  }
+
+  public void setKeycloakRoleId(String keycloakRoleId) {
+    this.keycloakRoleId = keycloakRoleId;
   }
 }
