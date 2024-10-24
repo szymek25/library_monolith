@@ -15,69 +15,76 @@
       </form>
     </div>
   </div>
-  <div class="row">
-    <div class="col">
-      <table class="table">
-        <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">
-            <spring:message code="users.list.table.email"/>
-          </th>
-          <th scope="col">
-            <spring:message code="users.list.table.name"/>
-          </th>
-          <th scope="col">
-            <spring:message code="users.list.table.lastName"/>
-          </th>
-          <th scope="col">
-            <spring:message code="users.list.table.dayOfBirth"/>
-          </th>
-          <sec:authorize access="hasRole('MANAGER')">
-            <th scope="col">
-              <spring:message code="users.list.table.type"/>
-            </th>
-          </sec:authorize>
-          <th scope="col">
-            <spring:message code="users.list.table.actions"/>
-          </th>
-        </tr>
-        </thead>
-        <c:forEach items="${users}" var="user">
-          <tr>
-            <th scope="row">${user.id}</th>
-            <td>${user.email}</td>
-            <td>${user.name}</td>
-            <td>${user.lastName}</td>
-            <td>${user.dayOfBirth}</td>
-            <sec:authorize access="hasRole('MANAGER')">
-              <td>${user.accountType}</td>
-            </sec:authorize>
-            <td>
-              <sec:authorize access="hasRole('EMPLOYEE')">
-                <a target="_blank" href="/users/printUserLabel/${user.id}" class="btn btn-primary btn-block">
-                  <spring:message code="users.list.table.actions.print"/>
-                </a>
-                <a class="btn btn-primary btn-block" href="edit/${user.id}">
-                  <spring:message code="users.list.table.actions.edit"/>
-                </a>
-              </sec:authorize>
+  <c:choose>
+    <c:when test="${empty users}">
+      <spring:message code="users.list.table.empty"/>
+    </c:when>
+    <c:otherwise>
+      <div class="row">
+        <div class="col">
+          <table class="table">
+            <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">
+                <spring:message code="users.list.table.email"/>
+              </th>
+              <th scope="col">
+                <spring:message code="users.list.table.name"/>
+              </th>
+              <th scope="col">
+                <spring:message code="users.list.table.lastName"/>
+              </th>
+              <th scope="col">
+                <spring:message code="users.list.table.dayOfBirth"/>
+              </th>
               <sec:authorize access="hasRole('MANAGER')">
-                <a class="btn btn-primary btn-block" href="edit/${user.id}">
-                  <spring:message code="users.list.table.actions.edit"/>
-                </a>
-                <form action="delete/${user.id}" method="POST">
-                  <button class="btn btn-primary btn-block" type="submit">
-                    <spring:message code="users.list.table.actions.delete"/>
-                  </button>
-                </form>
+                <th scope="col">
+                  <spring:message code="users.list.table.type"/>
+                </th>
               </sec:authorize>
-            </td>
-          </tr>
-        </c:forEach>
-        </tbody>
-      </table>
-      <t:paginator pages="${pages}" current="${currentPage}"/>
-    </div>
-  </div>
+              <th scope="col">
+                <spring:message code="users.list.table.actions"/>
+              </th>
+            </tr>
+            </thead>
+            <c:forEach items="${users}" var="user">
+              <tr>
+                <th scope="row">${user.id}</th>
+                <td>${user.email}</td>
+                <td>${user.name}</td>
+                <td>${user.lastName}</td>
+                <td>${user.dayOfBirth}</td>
+                <sec:authorize access="hasRole('MANAGER')">
+                  <td>${user.accountType}</td>
+                </sec:authorize>
+                <td>
+                  <sec:authorize access="hasRole('EMPLOYEE')">
+                    <a target="_blank" href="/users/printUserLabel/${user.id}" class="btn btn-primary btn-block">
+                      <spring:message code="users.list.table.actions.print"/>
+                    </a>
+                    <a class="btn btn-primary btn-block" href="edit/${user.id}">
+                      <spring:message code="users.list.table.actions.edit"/>
+                    </a>
+                  </sec:authorize>
+                  <sec:authorize access="hasRole('MANAGER')">
+                    <a class="btn btn-primary btn-block" href="edit/${user.id}">
+                      <spring:message code="users.list.table.actions.edit"/>
+                    </a>
+                    <form action="delete/${user.id}" method="POST">
+                      <button class="btn btn-primary btn-block" type="submit">
+                        <spring:message code="users.list.table.actions.delete"/>
+                      </button>
+                    </form>
+                  </sec:authorize>
+                </td>
+              </tr>
+            </c:forEach>
+            </tbody>
+          </table>
+          <t:paginator pages="${pages}" current="${currentPage}"/>
+        </div>
+      </div>
+    </c:otherwise>
+  </c:choose>
 </t:page>
