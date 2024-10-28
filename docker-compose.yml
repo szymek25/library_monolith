@@ -35,7 +35,7 @@ services:
     volumes:
       - ./kube/db:/var/lib/mysql
   keycloak:
-    image: quay.io/keycloak/keycloak
+    build: ./keycloack
     container_name: keycloak
     command: -v start-dev --import-realm --hostname=localhost --tls-hostname-verifier=ANY
     ports:
@@ -43,6 +43,11 @@ services:
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+      KAFKA_BOOTSTRAP_SERVERS: http://kafka1:29092
+      KAFKA_TOPIC: library
+      KAFKA_CLIENT_ID: keycloak
+      KAFKA_ADMIN_TOPIC: admin_events
+      KAFKA_EVENTS: REGISTER,LOGIN,LOGOUT
     volumes:
       - ./keycloack:/opt/keycloak/data/import
     networks:
