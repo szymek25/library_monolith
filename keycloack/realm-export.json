@@ -429,7 +429,11 @@
       "name": "ROLE_EMPLOYEE",
       "path": "/ROLE_EMPLOYEE",
       "subGroups": [],
-      "attributes": {},
+      "attributes": {
+        "description": [
+          "Pracownik"
+        ]
+      },
       "realmRoles": [],
       "clientRoles": {
         "realm-management": [
@@ -442,7 +446,11 @@
       "name": "ROLE_MANAGER",
       "path": "/ROLE_MANAGER",
       "subGroups": [],
-      "attributes": {},
+      "attributes": {
+        "description": [
+          "Menadżer"
+        ]
+      },
       "realmRoles": [],
       "clientRoles": {
         "realm-management": [
@@ -455,7 +463,11 @@
       "name": "ROLE_USER",
       "path": "/ROLE_USER",
       "subGroups": [],
-      "attributes": {},
+      "attributes": {
+        "description": [
+          "Użytkownik"
+        ]
+      },
       "realmRoles": [],
       "clientRoles": {}
     }

@@ -22,7 +22,7 @@ public class UserAPIDTO  {
 
 	private String postalCode;
 
-	private String roleId;
+	private RoleAPIDTO role;
 
 	private String keycloakId;
 
@@ -98,12 +98,12 @@ public class UserAPIDTO  {
 		this.postalCode = postalCode;
 	}
 
-	public String getRoleId() {
-		return roleId;
+	public RoleAPIDTO getRole() {
+		return role;
 	}
 
-	public void setRoleId(String roleId) {
-		this.roleId = roleId;
+	public void setRole(RoleAPIDTO role) {
+		this.role = role;
 	}
 
 	public String getKeycloakId() {

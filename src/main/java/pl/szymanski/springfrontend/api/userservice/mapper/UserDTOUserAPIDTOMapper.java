@@ -10,8 +10,9 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface UserDTOUserAPIDTOMapper  extends AbstractAPIResponseMapper<UserAPIDTO, UserDTO> {
 
-	@Mapping(target = "keycloakRoleId", source = "roleId")
 	@Mapping(target = "roleId", ignore = true)
+	@Mapping(target = "accountType", source = "role.description")
+	@Mapping(target = "keycloakRoleId", source = "role.id")
 	UserDTO map(UserAPIDTO userAPIDTO);
 
 	List<UserDTO> map(List<UserAPIDTO> userAPIDTOS);
