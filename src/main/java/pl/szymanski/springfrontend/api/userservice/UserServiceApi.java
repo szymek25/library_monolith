@@ -7,4 +7,6 @@ public interface UserServiceApi {
 	UserAPIResponseDTO getLibraryCustomers(int currentPage, int pageSize);
 
 	UserAPIResponseDTO getLibraryEmployees(int currentPage, int pageSize);
+
+	UserAPIResponseDTO getAllUsers(int currentPage, int pageSize);
 }

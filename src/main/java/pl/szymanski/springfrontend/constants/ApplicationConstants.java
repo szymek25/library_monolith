@@ -26,6 +26,7 @@ public class ApplicationConstants {
   public class UserService {
     public static final String LIBRARY_CUSTOMERS_ENDPOINT = "/users/customers";
     public static final String LIBRARY_EMPLOYEES_ENDPOINT = "/users/employees";
+    public static final String ALL_USERS_ENDPOINT = "/users";
     public static final String CURRENT_PAGE_PARAM = "currentPage";
     public static final String PAGE_SIZE_PARAM = "pageSize";
   }

@@ -12,6 +12,7 @@ import pl.szymanski.springfrontend.api.userservice.UserServiceApi;
 import pl.szymanski.springfrontend.api.userservice.dto.PageDTO;
 import pl.szymanski.springfrontend.api.userservice.dto.UserAPIResponseDTO;
 
+import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.ALL_USERS_ENDPOINT;
 import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.CURRENT_PAGE_PARAM;
 import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.LIBRARY_CUSTOMERS_ENDPOINT;
 import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.LIBRARY_EMPLOYEES_ENDPOINT;
@@ -30,31 +31,31 @@ public class UserServiceApiImpl implements UserServiceApi {
 	@Override
 	public UserAPIResponseDTO getLibraryCustomers(int currentPage, int pageSize) {
 		String customersEndpoint = userServiceUrl + LIBRARY_CUSTOMERS_ENDPOINT;
-		UriComponentsBuilder builder = UriComponentsBuilder
-				.fromUriString(customersEndpoint)
-				.queryParam(CURRENT_PAGE_PARAM, currentPage).queryParam(PAGE_SIZE_PARAM, pageSize);
-
-		try {
-			return restTemplate.getForEntity(
-					builder.toUriString(), UserAPIResponseDTO.class).getBody();
-		} catch (Exception e) {
-			LOG.error("Error while fetching library customers from user service", e);
-		}
-		return createEmptyResults();
+		return fetchUsers(customersEndpoint, currentPage, pageSize);
 	}
 
 	@Override
 	public UserAPIResponseDTO getLibraryEmployees(int currentPage, int pageSize) {
 		String employeesEndpoint = userServiceUrl + LIBRARY_EMPLOYEES_ENDPOINT;
+		return fetchUsers(employeesEndpoint, currentPage, pageSize);
+	}
+
+	@Override
+	public UserAPIResponseDTO getAllUsers(int currentPage, int pageSize) {
+		String allUsersEndpoint = userServiceUrl + ALL_USERS_ENDPOINT;
+		return fetchUsers(allUsersEndpoint, currentPage, pageSize);
+	}
+
+	private UserAPIResponseDTO fetchUsers(String endpoint, int currentPage, int pageSize) {
 		UriComponentsBuilder builder = UriComponentsBuilder
-				.fromUriString(employeesEndpoint)
+				.fromUriString(endpoint)
 				.queryParam(CURRENT_PAGE_PARAM, currentPage).queryParam(PAGE_SIZE_PARAM, pageSize);
 
 		try {
 			return restTemplate.getForEntity(
 					builder.toUriString(), UserAPIResponseDTO.class).getBody();
 		} catch (Exception e) {
-			LOG.error("Error while fetching library employees from user service", e);
+			LOG.error("Error while fetching users from user service", e);
 		}
 		return createEmptyResults();
 	}

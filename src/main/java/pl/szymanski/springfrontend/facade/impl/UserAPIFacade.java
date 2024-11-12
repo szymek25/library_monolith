@@ -35,4 +35,10 @@ public class UserAPIFacade extends UserFacadeImpl {
 		final UserAPIResponseDTO libraryEmployees = userServiceApi.getLibraryEmployees(pageable.getPageNumber(), pageable.getPageSize());
 		return userAPIDTOResponseConverter.convertToDTO(libraryEmployees);
 	}
+
+	@Override
+	public Page<UserDTO> getPaginatedUser(Pageable pageable) {
+		final UserAPIResponseDTO allUsers = userServiceApi.getAllUsers(pageable.getPageNumber(), pageable.getPageSize());
+		return userAPIDTOResponseConverter.convertToDTO(allUsers);
+	}
 }
