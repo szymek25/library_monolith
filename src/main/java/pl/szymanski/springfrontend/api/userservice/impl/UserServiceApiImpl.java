@@ -14,6 +14,7 @@ import pl.szymanski.springfrontend.api.userservice.dto.UserAPIResponseDTO;
 
 import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.CURRENT_PAGE_PARAM;
 import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.LIBRARY_CUSTOMERS_ENDPOINT;
+import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.LIBRARY_EMPLOYEES_ENDPOINT;
 import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.PAGE_SIZE_PARAM;
 
 @Service
@@ -28,9 +29,9 @@ public class UserServiceApiImpl implements UserServiceApi {
 
 	@Override
 	public UserAPIResponseDTO getLibraryCustomers(int currentPage, int pageSize) {
-		String endSessionEndpoint = userServiceUrl + LIBRARY_CUSTOMERS_ENDPOINT;
+		String customersEndpoint = userServiceUrl + LIBRARY_CUSTOMERS_ENDPOINT;
 		UriComponentsBuilder builder = UriComponentsBuilder
-				.fromUriString(endSessionEndpoint)
+				.fromUriString(customersEndpoint)
 				.queryParam(CURRENT_PAGE_PARAM, currentPage).queryParam(PAGE_SIZE_PARAM, pageSize);
 
 		try {
@@ -38,6 +39,22 @@ public class UserServiceApiImpl implements UserServiceApi {
 					builder.toUriString(), UserAPIResponseDTO.class).getBody();
 		} catch (Exception e) {
 			LOG.error("Error while fetching library customers from user service", e);
+		}
+		return createEmptyResults();
+	}
+
+	@Override
+	public UserAPIResponseDTO getLibraryEmployees(int currentPage, int pageSize) {
+		String employeesEndpoint = userServiceUrl + LIBRARY_EMPLOYEES_ENDPOINT;
+		UriComponentsBuilder builder = UriComponentsBuilder
+				.fromUriString(employeesEndpoint)
+				.queryParam(CURRENT_PAGE_PARAM, currentPage).queryParam(PAGE_SIZE_PARAM, pageSize);
+
+		try {
+			return restTemplate.getForEntity(
+					builder.toUriString(), UserAPIResponseDTO.class).getBody();
+		} catch (Exception e) {
+			LOG.error("Error while fetching library employees from user service", e);
 		}
 		return createEmptyResults();
 	}
