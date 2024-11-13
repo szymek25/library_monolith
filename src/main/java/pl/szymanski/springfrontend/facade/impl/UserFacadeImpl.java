@@ -42,13 +42,13 @@ public class UserFacadeImpl implements UserFacade {
   }
 
   @Override
-  public UserDTO getUserById(int id) {
-    User user = userService.getUserById(id);
+  public UserDTO getUserById(String id) {
+    User user = userService.getUserById(Integer.parseInt(id));
     return user != null ? new UserDTO(user) : null;
   }
 
   @Override
-  public boolean updateUser(final int id, final EditUserForm editUserForm) {
+  public boolean updateUser(final String id, final EditUserForm editUserForm) {
     final UserDTO userDTO = new UserDTO();
     userDTO.setEmail(editUserForm.getEmail());
     userDTO.setName(editUserForm.getName());
@@ -59,7 +59,7 @@ public class UserFacadeImpl implements UserFacade {
     userDTO.setTown(editUserForm.getTown());
     userDTO.setPostalCode(editUserForm.getPostalCode());
     userDTO.setPhone(editUserForm.getPhone());
-    return userService.updateUser(id, userDTO);
+    return userService.updateUser(Integer.parseInt(id), userDTO);
   }
 
   @Override

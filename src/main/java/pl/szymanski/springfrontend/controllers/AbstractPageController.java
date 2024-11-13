@@ -9,6 +9,7 @@ import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,9 +27,17 @@ public abstract class AbstractPageController {
   @Autowired
   private OrderFacade orderFacade;
 
+  @Value("${library.user-service-enabled}")
+  private boolean userServiceEnabled;
+
   @ModelAttribute("newOrders")
   public int newOrdersCount() {
     return orderFacade.countNewOrders();
+  }
+
+  @ModelAttribute("userServiceEnabled")
+  public boolean userServiceEnabled() {
+    return userServiceEnabled;
   }
 
   protected void addPaginationResult(final Integer currentPage, final String modelAttributeName,

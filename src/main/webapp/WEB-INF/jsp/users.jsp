@@ -59,19 +59,23 @@
                   <td>${user.accountType}</td>
                 </sec:authorize>
                 <td>
+                  <c:set var="userId" value="${user.id}"/>
+                  <c:if test="${userServiceEnabled}">
+                    <c:set var="userId" value="${user.keycloakId}"/>
+                  </c:if>
                   <sec:authorize access="hasRole('EMPLOYEE')">
-                    <a target="_blank" href="/users/printUserLabel/${user.id}" class="btn btn-primary btn-block">
+                    <a target="_blank" href="/users/printUserLabel/${userId}" class="btn btn-primary btn-block">
                       <spring:message code="users.list.table.actions.print"/>
                     </a>
-                    <a class="btn btn-primary btn-block" href="edit/${user.id}">
+                    <a class="btn btn-primary btn-block" href="edit/${userId}">
                       <spring:message code="users.list.table.actions.edit"/>
                     </a>
                   </sec:authorize>
                   <sec:authorize access="hasRole('MANAGER')">
-                    <a class="btn btn-primary btn-block" href="edit/${user.id}">
+                    <a class="btn btn-primary btn-block" href="edit/${userId}">
                       <spring:message code="users.list.table.actions.edit"/>
                     </a>
-                    <form action="delete/${user.id}" method="POST">
+                    <form action="delete/${userId}" method="POST">
                       <button class="btn btn-primary btn-block" type="submit">
                         <spring:message code="users.list.table.actions.delete"/>
                       </button>

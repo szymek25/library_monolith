@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.szymanski.springfrontend.api.userservice.UserServiceApi;
 import pl.szymanski.springfrontend.api.userservice.dto.PageDTO;
+import pl.szymanski.springfrontend.api.userservice.dto.UserAPIDTO;
 import pl.szymanski.springfrontend.api.userservice.dto.UserAPIResponseDTO;
 
 import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.ALL_USERS_ENDPOINT;
@@ -44,6 +45,19 @@ public class UserServiceApiImpl implements UserServiceApi {
 	public UserAPIResponseDTO getAllUsers(int currentPage, int pageSize) {
 		String allUsersEndpoint = userServiceUrl + ALL_USERS_ENDPOINT;
 		return fetchUsers(allUsersEndpoint, currentPage, pageSize);
+	}
+
+	@Override
+	public UserAPIDTO getUserById(String id) {
+		final String endpoint = userServiceUrl + "/users/" + id;
+
+		try {
+			return restTemplate.getForEntity(
+					endpoint, UserAPIDTO.class).getBody();
+		} catch (Exception e) {
+			LOG.error("Error while fetching user {} from user service", id, e);
+			return new UserAPIDTO();
+		}
 	}
 
 	private UserAPIResponseDTO fetchUsers(String endpoint, int currentPage, int pageSize) {

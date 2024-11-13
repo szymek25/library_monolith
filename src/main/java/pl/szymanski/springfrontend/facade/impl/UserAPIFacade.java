@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import pl.szymanski.springfrontend.api.userservice.UserServiceApi;
 import pl.szymanski.springfrontend.api.userservice.converter.APIResponseConverter;
 import pl.szymanski.springfrontend.api.userservice.dto.UserAPIResponseDTO;
+import pl.szymanski.springfrontend.api.userservice.mapper.UserDTOUserAPIDTOMapper;
 import pl.szymanski.springfrontend.dtos.UserDTO;
 
 @Component
@@ -23,6 +24,8 @@ public class UserAPIFacade extends UserFacadeImpl {
 
 	@Autowired
 	private APIResponseConverter<UserAPIResponseDTO, UserDTO> userAPIDTOResponseConverter;
+
+	@Autowired private UserDTOUserAPIDTOMapper userDTOUserAPIDTOMapper;
 
 	@Override
 	public Page<UserDTO> getPaginatedLibraryCustomers(Pageable pageable) {
@@ -40,5 +43,10 @@ public class UserAPIFacade extends UserFacadeImpl {
 	public Page<UserDTO> getPaginatedUser(Pageable pageable) {
 		final UserAPIResponseDTO allUsers = userServiceApi.getAllUsers(pageable.getPageNumber(), pageable.getPageSize());
 		return userAPIDTOResponseConverter.convertToDTO(allUsers);
+	}
+
+	@Override
+	public UserDTO getUserById(final String id) {
+		return userDTOUserAPIDTOMapper.map(userServiceApi.getUserById(id));
 	}
 }

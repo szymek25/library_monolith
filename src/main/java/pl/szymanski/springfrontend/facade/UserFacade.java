@@ -15,9 +15,9 @@ public interface UserFacade {
 
   Page<UserDTO> getPaginatedLibraryEmployees(Pageable pageable);
 
-  UserDTO getUserById(int id);
+  UserDTO getUserById(String id);
 
-  boolean updateUser(int id, EditUserForm editUserForm);
+  boolean updateUser(String id, EditUserForm editUserForm);
 
   boolean updateUserPassword(int userId, String password);
 
