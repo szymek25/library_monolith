@@ -37,7 +37,7 @@ public class KafkaConfig {
 
 	@Bean
 	public NewTopic libraryUserUpdatesTopic() {
-		return new NewTopic(userUpdatesTopic, 1, (short) 1);
+		return new NewTopic(userUpdatesTopic, 4, (short) 1);
 	}
 
 	@Bean
