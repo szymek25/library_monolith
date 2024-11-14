@@ -27,7 +27,7 @@ public class KafkaMessageServiceImpl implements KafkaMessageService {
 
 	@Override
 	public void sendUserUpdateMessage(UpdateUserEvent event) {
-		ListenableFuture<SendResult<String, UpdateUserEvent>> send = kafkaTemplate.send(userUpdatesTopic, event);
+		ListenableFuture<SendResult<String, UpdateUserEvent>> send = kafkaTemplate.send(userUpdatesTopic, event.getId(), event);
 		send.addCallback(result -> LOG.debug("Sent message: {}", result), ex -> LOG.error("Failed to send message", ex));
 	}
 }
