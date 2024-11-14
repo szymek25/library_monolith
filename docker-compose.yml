@@ -16,6 +16,7 @@ services:
       - SPRING_EMAIL_USERNAME=pawel.library@gmail.com
       - SPRING_EMAIL_PASSWORD=${EMAIL_KEY}
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+      - KAFKA_BOOTSTRAP_SERVERS=http://kafka1:29092
     networks:
       - local
     ports:
