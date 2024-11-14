@@ -1,7 +1,6 @@
 package pl.szymanski.springfrontend.facade.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
@@ -10,8 +9,12 @@ import org.springframework.stereotype.Component;
 import pl.szymanski.springfrontend.api.userservice.UserServiceApi;
 import pl.szymanski.springfrontend.api.userservice.converter.APIResponseConverter;
 import pl.szymanski.springfrontend.api.userservice.dto.UserAPIResponseDTO;
+import pl.szymanski.springfrontend.api.userservice.events.UpdateUserEvent;
+import pl.szymanski.springfrontend.api.userservice.kafka.KafkaMessageService;
+import pl.szymanski.springfrontend.api.userservice.mapper.UpdateUserEventEditUserFormMapper;
 import pl.szymanski.springfrontend.api.userservice.mapper.UserDTOUserAPIDTOMapper;
 import pl.szymanski.springfrontend.dtos.UserDTO;
+import pl.szymanski.springfrontend.forms.EditUserForm;
 
 @Component
 @Primary
@@ -21,11 +24,17 @@ public class UserAPIFacade extends UserFacadeImpl {
 	@Autowired
 	private UserServiceApi userServiceApi;
 
-
 	@Autowired
 	private APIResponseConverter<UserAPIResponseDTO, UserDTO> userAPIDTOResponseConverter;
 
-	@Autowired private UserDTOUserAPIDTOMapper userDTOUserAPIDTOMapper;
+	@Autowired
+	private UserDTOUserAPIDTOMapper userDTOUserAPIDTOMapper;
+
+	@Autowired
+	private UpdateUserEventEditUserFormMapper updateUserEventEditUserFormMapper;
+
+	@Autowired
+	private KafkaMessageService kafkaMessageService;
 
 	@Override
 	public Page<UserDTO> getPaginatedLibraryCustomers(Pageable pageable) {
@@ -48,5 +57,13 @@ public class UserAPIFacade extends UserFacadeImpl {
 	@Override
 	public UserDTO getUserById(final String id) {
 		return userDTOUserAPIDTOMapper.map(userServiceApi.getUserById(id));
+	}
+
+	@Override
+	public boolean updateUser(final String id, final EditUserForm editUserForm) {
+		final UpdateUserEvent updateUserEvent = updateUserEventEditUserFormMapper.map(editUserForm);
+		updateUserEvent.setId(id);
+		kafkaMessageService.sendUserUpdateMessage(updateUserEvent);
+		return true;
 	}
 }
