@@ -1,5 +1,6 @@
 package pl.szymanski.springfrontend.config;
 
+import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -13,7 +14,7 @@ import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
-import pl.szymanski.springfrontend.api.userservice.events.UpdateUserEvent;
+import pl.szymanski.springfrontend.avro.UpdateUserEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,11 +23,17 @@ import java.util.Map;
 @EnableKafka
 public class KafkaConfig {
 
+	private static final String SCHEMA_REGISTRY_URL_KEY = "schema.registry.url";
 	@Value("${library.kafka.bootstrap-servers}")
 	private String bootstrapAddress;
 
 	@Value("${library.kafka.topics.user-updates}")
 	private String userUpdatesTopic;
+
+	@Value("${library.kafka.schema-registry-url-key}")
+	private String schemaRegistryUrlKey;
+
+
 
 	@Bean
 	public KafkaAdmin kafkaAdmin() {
@@ -51,7 +58,8 @@ public class KafkaConfig {
 				StringSerializer.class);
 		configProps.put(
 				ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-				JsonSerializer.class);
+				KafkaAvroSerializer.class);
+		configProps.put(SCHEMA_REGISTRY_URL_KEY, schemaRegistryUrlKey);
 		return new DefaultKafkaProducerFactory<>(configProps);
 	}
 

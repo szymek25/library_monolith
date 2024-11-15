@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import pl.szymanski.springfrontend.api.userservice.UserServiceApi;
 import pl.szymanski.springfrontend.api.userservice.converter.APIResponseConverter;
 import pl.szymanski.springfrontend.api.userservice.dto.UserAPIResponseDTO;
-import pl.szymanski.springfrontend.api.userservice.events.UpdateUserEvent;
+import pl.szymanski.springfrontend.avro.UpdateUserEvent;
 import pl.szymanski.springfrontend.api.userservice.kafka.KafkaMessageService;
 import pl.szymanski.springfrontend.api.userservice.mapper.UpdateUserEventEditUserFormMapper;
 import pl.szymanski.springfrontend.api.userservice.mapper.UserDTOUserAPIDTOMapper;
@@ -61,8 +61,8 @@ public class UserAPIFacade extends UserFacadeImpl {
 
 	@Override
 	public boolean updateUser(final String id, final EditUserForm editUserForm) {
-		final UpdateUserEvent updateUserEvent = updateUserEventEditUserFormMapper.map(editUserForm);
-		updateUserEvent.setId(id);
+		final UpdateUserEvent updateUserEvent = updateUserEventEditUserFormMapper.map(editUserForm, id);
+//		updateUserEvent.setId(id);
 		kafkaMessageService.sendUserUpdateMessage(updateUserEvent);
 		return true;
 	}

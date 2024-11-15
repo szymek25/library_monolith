@@ -1,6 +1,7 @@
 package pl.szymanski.springfrontend.api.userservice.kafka;
 
-import pl.szymanski.springfrontend.api.userservice.events.UpdateUserEvent;
+
+import pl.szymanski.springfrontend.avro.UpdateUserEvent;
 
 public interface KafkaMessageService {
 
