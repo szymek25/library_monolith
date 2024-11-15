@@ -141,7 +141,7 @@ services:
       - "9081:9081"
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: "zoo1:2181"
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: "kafka1:29092"
     restart: unless-stopped
     networks:
       - local
