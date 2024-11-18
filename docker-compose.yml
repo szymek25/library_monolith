@@ -92,7 +92,7 @@ services:
     networks:
       - local
     volumes:
-      - ./kube/db:/var/lib/user-service-db
+      - ./kube/user-service-db:/var/lib/mysql
   zoo1:
     image: confluentinc/cp-zookeeper:7.3.2
     hostname: zoo1
