@@ -72,6 +72,7 @@ services:
       - SPRING_DATASOURCE_DRIVER=com.mysql.jdbc.Driver
       - USER_SERVICE_CLIENT_SECRET=wDg1nH8IR7Ps46qAmnxhd56JD1GCsrfV
       - KAFKA_BOOTSTRAP_SERVERS=http://kafka1:29092
+      - SCHEMA_REGISTRY_URL=http://schema-registry:9081
     ports:
       - '8082'
       - '50005:50005'
