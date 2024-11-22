@@ -27,7 +27,7 @@ public class UserDTO {
 
   private String postalCode;
 
-  private long roleId;
+  private String roleId;
 
   private String accountType;
 
@@ -47,7 +47,7 @@ public class UserDTO {
     this.postalCode = user.getPostalCode();
     Role role = user.getRole();
     if (role != null) {
-      this.roleId = role.getId();
+      this.roleId = String.valueOf(role.getId());
       this.accountType = role.getDescription();
     }
   }
@@ -56,11 +56,11 @@ public class UserDTO {
 
   }
 
-  public long getRoleId() {
+  public String getRoleId() {
     return roleId;
   }
 
-  public void setRoleId(long roleId) {
+  public void setRoleId(String roleId) {
     this.roleId = roleId;
   }
 

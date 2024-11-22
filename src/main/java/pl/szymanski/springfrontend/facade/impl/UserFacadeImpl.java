@@ -54,7 +54,7 @@ public class UserFacadeImpl implements UserFacade {
     userDTO.setName(editUserForm.getName());
     userDTO.setLastName(editUserForm.getLastName());
     userDTO.setDayOfBirth(Date.valueOf(editUserForm.getDayOfBirth()));
-    userDTO.setRoleId(Long.valueOf(editUserForm.getRoleId()));
+    userDTO.setRoleId(editUserForm.getRoleId());
     userDTO.setAddressLine1(editUserForm.getAddressLine1());
     userDTO.setTown(editUserForm.getTown());
     userDTO.setPostalCode(editUserForm.getPostalCode());
@@ -72,7 +72,7 @@ public class UserFacadeImpl implements UserFacade {
     final UserDTO userDTO = new UserDTO();
     userDTO.setEmail(addUserForm.getEmail());
     try {
-      userDTO.setRoleId(Integer.parseInt(addUserForm.getRoleId()));
+      userDTO.setRoleId(addUserForm.getRoleId());
     } catch (NumberFormatException e) {
       LOG.warn("Role id wasn`t a number");
     }

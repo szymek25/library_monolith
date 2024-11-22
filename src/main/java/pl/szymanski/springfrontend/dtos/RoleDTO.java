@@ -5,21 +5,23 @@ import pl.szymanski.springfrontend.model.Role;
 
 public class RoleDTO {
 
-  private long id;
+  private String id;
   private String name;
   private String description;
 
   public RoleDTO(Role role) {
-    this.id = role.getId();
-    this.name = role.getName();
-    this.description = role.getDescription();
+    if(role != null) {
+      this.id = String.valueOf(role.getId());
+      this.name = role.getName();
+      this.description = role.getDescription();
+    }
   }
 
-  public long getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(String id) {
     this.id = id;
   }
 

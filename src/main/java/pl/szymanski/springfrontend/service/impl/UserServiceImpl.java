@@ -204,7 +204,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
   }
 
   private void setRole(UserDTO userDTO, User user) throws Exception {
-    Role role = roleService.getById(userDTO.getRoleId());
+    Role role = roleService.getById(Long.parseLong(userDTO.getRoleId()));
     if (role == null) {
       throw new Exception("Didn`t find user role with id: " + userDTO.getRoleId());
     }

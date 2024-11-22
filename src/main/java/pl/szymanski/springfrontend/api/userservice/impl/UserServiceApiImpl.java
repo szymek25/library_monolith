@@ -10,8 +10,12 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.szymanski.springfrontend.api.userservice.UserServiceApi;
 import pl.szymanski.springfrontend.api.userservice.dto.PageDTO;
+import pl.szymanski.springfrontend.api.userservice.dto.RoleAPIDTO;
 import pl.szymanski.springfrontend.api.userservice.dto.UserAPIDTO;
 import pl.szymanski.springfrontend.api.userservice.dto.UserAPIResponseDTO;
+
+import java.util.Collections;
+import java.util.List;
 
 import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.ALL_USERS_ENDPOINT;
 import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.CURRENT_PAGE_PARAM;
@@ -57,6 +61,20 @@ public class UserServiceApiImpl implements UserServiceApi {
 		} catch (Exception e) {
 			LOG.error("Error while fetching user {} from user service", id, e);
 			return new UserAPIDTO();
+		}
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<RoleAPIDTO> getAllRoles() {
+		final String endpoint = userServiceUrl + "/roles";
+		try {
+			RoleAPIDTO[] response = restTemplate.getForEntity(
+					endpoint, RoleAPIDTO[].class).getBody();
+			return response != null ? Lists.newArrayList(response) : Collections.EMPTY_LIST;
+		} catch (Exception e) {
+			LOG.error("Error while fetching roles from user service", e);
+			return Collections.EMPTY_LIST;
 		}
 	}
 
