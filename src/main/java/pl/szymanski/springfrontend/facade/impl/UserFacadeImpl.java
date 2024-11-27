@@ -88,8 +88,8 @@ public class UserFacadeImpl implements UserFacade {
   }
 
   @Override
-  public boolean delete(int id) {
-    return userService.delete(id);
+  public boolean delete(String id) {
+    return userService.delete(Integer.parseInt(id));
   }
 
   @Override

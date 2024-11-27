@@ -66,4 +66,5 @@ library:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     topics:
       user-updates: user-updates
+      user-removes: user-removes
     schema-registry-url-key: ${SCHEMA_REGISTRY_URL}

@@ -13,7 +13,7 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
-import org.springframework.kafka.support.serializer.JsonSerializer;
+import pl.szymanski.springfrontend.avro.RemoveUserEvent;
 import pl.szymanski.springfrontend.avro.UpdateUserEvent;
 
 import java.util.HashMap;
@@ -29,6 +29,9 @@ public class KafkaConfig {
 
 	@Value("${library.kafka.topics.user-updates}")
 	private String userUpdatesTopic;
+
+	@Value("${library.kafka.topics.user-removes}")
+	private String userRemovesTopic;
 
 	@Value("${library.kafka.schema-registry-url-key}")
 	private String schemaRegistryUrlKey;
@@ -48,7 +51,33 @@ public class KafkaConfig {
 	}
 
 	@Bean
-	public ProducerFactory<String, UpdateUserEvent> producerFactory() {
+	public NewTopic libraryUserRemovesTopic() {
+		return new NewTopic(userRemovesTopic, 4, (short) 1);
+	}
+
+	@Bean
+	public ProducerFactory<String, UpdateUserEvent> updateUserProducerFactory() {
+		Map<String, Object> configProps = avroConfigProps();
+		return new DefaultKafkaProducerFactory<>(configProps);
+	}
+
+	@Bean
+	public KafkaTemplate<String, UpdateUserEvent> updateUserKafkaTemplate() {
+		return new KafkaTemplate<>(updateUserProducerFactory());
+	}
+
+	@Bean
+	public ProducerFactory<String, RemoveUserEvent> removeUserProducerFactory() {
+		Map<String, Object> configProps = avroConfigProps();
+		return new DefaultKafkaProducerFactory<>(configProps);
+	}
+
+	@Bean
+	public KafkaTemplate<String, RemoveUserEvent> removeUserKafkaTemplate() {
+		return new KafkaTemplate<>(removeUserProducerFactory());
+	}
+
+	private Map<String, Object> avroConfigProps() {
 		Map<String, Object> configProps = new HashMap<>();
 		configProps.put(
 				ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -60,11 +89,6 @@ public class KafkaConfig {
 				ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
 				KafkaAvroSerializer.class);
 		configProps.put(SCHEMA_REGISTRY_URL_KEY, schemaRegistryUrlKey);
-		return new DefaultKafkaProducerFactory<>(configProps);
-	}
-
-	@Bean
-	public KafkaTemplate<String, UpdateUserEvent> kafkaTemplateUpdateUser() {
-		return new KafkaTemplate<>(producerFactory());
+		return configProps;
 	}
 }

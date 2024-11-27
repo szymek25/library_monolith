@@ -271,8 +271,8 @@ public class UserPageController extends AbstractPageController {
   }
 
   @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
-  @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
-  public String deleteUser(@PathVariable("id") final Optional<Integer> id) {
+  @PreAuthorize("hasRole('ROLE_MANAGER')")
+  public String deleteUser(@PathVariable("id") final Optional<String> id) {
     if (!id.isPresent()) {
       return REDIRECT_PREFIX + "/users/list";
     }

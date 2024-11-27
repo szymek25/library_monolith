@@ -23,7 +23,7 @@ public interface UserFacade {
 
   boolean addNewUser(AddUserForm userForm);
 
-  boolean delete(int id);
+  boolean delete(String id);
 
   boolean registerUser(RegisterForm registerForm);
 
