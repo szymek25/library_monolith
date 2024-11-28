@@ -19,7 +19,7 @@ public interface UserFacade {
 
   boolean updateUser(String id, EditUserForm editUserForm);
 
-  boolean updateUserPassword(int userId, String password);
+  boolean updateUserPassword(String userId, String password);
 
   boolean addNewUser(AddUserForm userForm);
 

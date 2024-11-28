@@ -10,6 +10,7 @@ import pl.szymanski.springfrontend.api.userservice.UserServiceApi;
 import pl.szymanski.springfrontend.api.userservice.converter.APIResponseConverter;
 import pl.szymanski.springfrontend.api.userservice.dto.UserAPIResponseDTO;
 import pl.szymanski.springfrontend.avro.RemoveUserEvent;
+import pl.szymanski.springfrontend.avro.UpdatePasswordEvent;
 import pl.szymanski.springfrontend.avro.UpdateUserEvent;
 import pl.szymanski.springfrontend.api.userservice.kafka.KafkaMessageService;
 import pl.szymanski.springfrontend.api.userservice.mapper.UpdateUserEventEditUserFormMapper;
@@ -70,6 +71,12 @@ public class UserAPIFacade extends UserFacadeImpl {
 	@Override
 	public boolean delete(String id) {
 		kafkaMessageService.sendUserDeleteMessage(new RemoveUserEvent(id));
+		return true;
+	}
+
+	@Override
+	public boolean updateUserPassword(String userId, String password) {
+		kafkaMessageService.sendUpdatePasswordMessage(new UpdatePasswordEvent(userId, password));
 		return true;
 	}
 }

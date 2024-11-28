@@ -63,8 +63,8 @@ public class UserFacadeImpl implements UserFacade {
   }
 
   @Override
-  public boolean updateUserPassword(int userId, String password) {
-    return userService.updateUserPassword(userId, password);
+  public boolean updateUserPassword(String userId, String password) {
+    return userService.updateUserPassword(Integer.parseInt(userId), password);
   }
 
   @Override

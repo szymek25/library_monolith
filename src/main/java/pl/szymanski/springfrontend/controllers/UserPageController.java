@@ -246,7 +246,7 @@ public class UserPageController extends AbstractPageController {
 
   @RequestMapping(value = "/edit/{id}/updatePassword", method = RequestMethod.POST)
   @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_MANAGER')")
-  public String updatePassword(@PathVariable("id") Optional<Integer> id,
+  public String updatePassword(@PathVariable("id") Optional<String> id,
       @ModelAttribute("updatePasswordForm") final @Valid UpdatePasswordForm form,
       final BindingResult result, final Model model) {
 
@@ -254,7 +254,7 @@ public class UserPageController extends AbstractPageController {
       return REDIRECT_PREFIX + "/users/list";
     }
 
-    final int userId = id.get();
+    final String userId = id.get();
 
     if (result.hasErrors()) {
       EditUserForm userForm = prepareEditUserForm(userFacade.getUserById(String.valueOf(id.get())));

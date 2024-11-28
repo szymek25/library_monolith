@@ -67,4 +67,5 @@ library:
     topics:
       user-updates: user-updates
       user-removes: user-removes
+      update-password: update-password
     schema-registry-url-key: ${SCHEMA_REGISTRY_URL}

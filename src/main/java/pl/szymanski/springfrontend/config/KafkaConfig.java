@@ -14,6 +14,7 @@ import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import pl.szymanski.springfrontend.avro.RemoveUserEvent;
+import pl.szymanski.springfrontend.avro.UpdatePasswordEvent;
 import pl.szymanski.springfrontend.avro.UpdateUserEvent;
 
 import java.util.HashMap;
@@ -36,6 +37,8 @@ public class KafkaConfig {
 	@Value("${library.kafka.schema-registry-url-key}")
 	private String schemaRegistryUrlKey;
 
+	@Value("${library.kafka.topics.update-password}")
+	private String updatePasswordTopic;
 
 
 	@Bean
@@ -54,6 +57,12 @@ public class KafkaConfig {
 	public NewTopic libraryUserRemovesTopic() {
 		return new NewTopic(userRemovesTopic, 4, (short) 1);
 	}
+
+	@Bean
+	public NewTopic updatePasswordTopic() {
+		return new NewTopic(updatePasswordTopic, 4, (short) 1);
+	}
+
 
 	@Bean
 	public ProducerFactory<String, UpdateUserEvent> updateUserProducerFactory() {
@@ -75,6 +84,17 @@ public class KafkaConfig {
 	@Bean
 	public KafkaTemplate<String, RemoveUserEvent> removeUserKafkaTemplate() {
 		return new KafkaTemplate<>(removeUserProducerFactory());
+	}
+
+	@Bean
+	public ProducerFactory<String, UpdatePasswordEvent> updatePasswordProducerFactory() {
+		Map<String, Object> configProps = avroConfigProps();
+		return new DefaultKafkaProducerFactory<>(configProps);
+	}
+
+	@Bean
+	public KafkaTemplate<String, UpdatePasswordEvent> updatePasswordKafkaTemplate() {
+		return new KafkaTemplate<>(updatePasswordProducerFactory());
 	}
 
 	private Map<String, Object> avroConfigProps() {
