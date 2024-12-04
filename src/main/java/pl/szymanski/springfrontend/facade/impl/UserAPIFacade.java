@@ -8,14 +8,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import pl.szymanski.springfrontend.api.userservice.UserServiceApi;
 import pl.szymanski.springfrontend.api.userservice.converter.APIResponseConverter;
+import pl.szymanski.springfrontend.api.userservice.dto.AddUserAPIDTO;
 import pl.szymanski.springfrontend.api.userservice.dto.UserAPIResponseDTO;
+import pl.szymanski.springfrontend.api.userservice.kafka.KafkaMessageService;
+import pl.szymanski.springfrontend.api.userservice.mapper.AddUserAPIDTOAddUserFormMapper;
+import pl.szymanski.springfrontend.api.userservice.mapper.UpdateUserEventEditUserFormMapper;
+import pl.szymanski.springfrontend.api.userservice.mapper.UserDTOUserAPIDTOMapper;
 import pl.szymanski.springfrontend.avro.RemoveUserEvent;
 import pl.szymanski.springfrontend.avro.UpdatePasswordEvent;
 import pl.szymanski.springfrontend.avro.UpdateUserEvent;
-import pl.szymanski.springfrontend.api.userservice.kafka.KafkaMessageService;
-import pl.szymanski.springfrontend.api.userservice.mapper.UpdateUserEventEditUserFormMapper;
-import pl.szymanski.springfrontend.api.userservice.mapper.UserDTOUserAPIDTOMapper;
 import pl.szymanski.springfrontend.dtos.UserDTO;
+import pl.szymanski.springfrontend.exceptions.DuplicatedUserException;
+import pl.szymanski.springfrontend.forms.AddUserForm;
 import pl.szymanski.springfrontend.forms.EditUserForm;
 
 @Component
@@ -37,6 +41,9 @@ public class UserAPIFacade extends UserFacadeImpl {
 
 	@Autowired
 	private KafkaMessageService kafkaMessageService;
+
+	@Autowired
+	private AddUserAPIDTOAddUserFormMapper addUserAPIDTOAddUserFormMapper;
 
 	@Override
 	public Page<UserDTO> getPaginatedLibraryCustomers(Pageable pageable) {
@@ -78,5 +85,12 @@ public class UserAPIFacade extends UserFacadeImpl {
 	public boolean updateUserPassword(String userId, String password) {
 		kafkaMessageService.sendUpdatePasswordMessage(new UpdatePasswordEvent(userId, password));
 		return true;
+	}
+
+	@Override
+	public boolean addNewUser(AddUserForm addUserForm) throws DuplicatedUserException {
+		AddUserAPIDTO addUserAPIDTO = addUserAPIDTOAddUserFormMapper.map(addUserForm);
+
+		return userServiceApi.addUser(addUserAPIDTO);
 	}
 }

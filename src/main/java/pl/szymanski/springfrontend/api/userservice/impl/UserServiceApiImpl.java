@@ -5,18 +5,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.szymanski.springfrontend.api.userservice.UserServiceApi;
+import pl.szymanski.springfrontend.api.userservice.dto.AddUserAPIDTO;
 import pl.szymanski.springfrontend.api.userservice.dto.PageDTO;
 import pl.szymanski.springfrontend.api.userservice.dto.RoleAPIDTO;
 import pl.szymanski.springfrontend.api.userservice.dto.UserAPIDTO;
 import pl.szymanski.springfrontend.api.userservice.dto.UserAPIResponseDTO;
+import pl.szymanski.springfrontend.exceptions.DuplicatedUserException;
 
 import java.util.Collections;
 import java.util.List;
 
+import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.ADD_USER_ENDPOINT;
 import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.ALL_USERS_ENDPOINT;
 import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.CURRENT_PAGE_PARAM;
 import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.LIBRARY_CUSTOMERS_ENDPOINT;
@@ -75,6 +81,22 @@ public class UserServiceApiImpl implements UserServiceApi {
 		} catch (Exception e) {
 			LOG.error("Error while fetching roles from user service", e);
 			return Collections.EMPTY_LIST;
+		}
+	}
+
+	@Override
+	public boolean addUser(AddUserAPIDTO addUserAPIDTO) throws DuplicatedUserException {
+		final String endpoint = userServiceUrl + ADD_USER_ENDPOINT;
+		try {
+			ResponseEntity<Void> response = restTemplate.postForEntity(endpoint, addUserAPIDTO, Void.class);
+			return response.getStatusCode().equals(HttpStatus.CREATED);
+		} catch (HttpClientErrorException e) {
+			if (e.getStatusCode().equals(HttpStatus.CONFLICT)) {
+				throw new DuplicatedUserException("User with email " + addUserAPIDTO.getEmail() + " already exists");
+			}
+			LOG.error("Error while adding user to user service", e);
+
+			return false;
 		}
 	}
 
