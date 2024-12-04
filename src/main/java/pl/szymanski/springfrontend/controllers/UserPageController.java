@@ -31,6 +31,7 @@ import pl.szymanski.springfrontend.barcode.BarcodeDecoder;
 import pl.szymanski.springfrontend.constants.ApplicationConstants;
 import pl.szymanski.springfrontend.dtos.UserDTO;
 import pl.szymanski.springfrontend.exceptions.BarcodeDecodingException;
+import pl.szymanski.springfrontend.exceptions.DuplicatedUserException;
 import pl.szymanski.springfrontend.facade.RoleFacade;
 import pl.szymanski.springfrontend.facade.UserFacade;
 import pl.szymanski.springfrontend.forms.AddUserForm;
@@ -116,16 +117,17 @@ public class UserPageController extends AbstractPageController {
     }
 
     String email = form.getEmail();
-    if (!StringUtils.isEmpty(email) && userFacade.existsUserByEmail(email)) {
+
+    try {
+      if (!userFacade.addNewUser(form)) {
+        addSelectedRoleToModel(form.getRoleId(), model);
+        addGlobalErrorMessage("users.add.error", model);
+
+        return "addNewUser";
+      }
+    } catch (DuplicatedUserException e) {
       addSelectedRoleToModel(form.getRoleId(), model);
       addGlobalErrorMessage("users.add.userExists", model);
-
-      return "addNewUser";
-    }
-
-    if (!userFacade.addNewUser(form)) {
-      addSelectedRoleToModel(form.getRoleId(), model);
-      addGlobalErrorMessage("users.add.error", model);
 
       return "addNewUser";
     }

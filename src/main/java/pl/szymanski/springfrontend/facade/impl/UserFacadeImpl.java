@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import pl.szymanski.springfrontend.dtos.UserDTO;
+import pl.szymanski.springfrontend.exceptions.DuplicatedUserException;
 import pl.szymanski.springfrontend.facade.UserFacade;
 import pl.szymanski.springfrontend.forms.AddUserForm;
 import pl.szymanski.springfrontend.forms.EditUserForm;
@@ -68,7 +69,11 @@ public class UserFacadeImpl implements UserFacade {
   }
 
   @Override
-  public boolean addNewUser(AddUserForm addUserForm) {
+  public boolean addNewUser(AddUserForm addUserForm) throws DuplicatedUserException {
+    boolean userAlreadyExists = existsUserByEmail(addUserForm.getEmail());
+    if (userAlreadyExists) {
+      throw new DuplicatedUserException("User with email " + addUserForm.getEmail() + " already exists");
+    }
     final UserDTO userDTO = new UserDTO();
     userDTO.setEmail(addUserForm.getEmail());
     try {
