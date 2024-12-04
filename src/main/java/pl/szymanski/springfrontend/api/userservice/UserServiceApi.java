@@ -25,4 +25,6 @@ public interface UserServiceApi {
 
 	boolean registerUser(RegisterUserAPIDTO addUserAPIDTO) throws DuplicatedUserException;
 
+	UserAPIDTO getUserByEmail(String email);
+
 }

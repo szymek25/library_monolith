@@ -106,4 +106,9 @@ public class UserAPIFacade extends UserFacadeImpl {
 
 		return userServiceApi.registerUser(registerUserAPIDTO);
 	}
+
+	@Override
+	public boolean existsUserByEmail(String email) {
+		return userServiceApi.getUserByEmail(email) != null;
+	}
 }

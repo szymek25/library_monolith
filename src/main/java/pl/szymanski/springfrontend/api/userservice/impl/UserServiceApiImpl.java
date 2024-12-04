@@ -26,6 +26,7 @@ import java.util.List;
 import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.ADD_USER_ENDPOINT;
 import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.ALL_USERS_ENDPOINT;
 import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.CURRENT_PAGE_PARAM;
+import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.GET_USER_BY_EMAIL_ENDPOINT;
 import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.LIBRARY_CUSTOMERS_ENDPOINT;
 import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.LIBRARY_EMPLOYEES_ENDPOINT;
 import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.PAGE_SIZE_PARAM;
@@ -115,6 +116,18 @@ public class UserServiceApiImpl implements UserServiceApi {
 			LOG.error("Error while adding user to user service", e);
 
 			return false;
+		}
+	}
+
+	@Override
+	public UserAPIDTO getUserByEmail(String email) {
+		final String endpoint = userServiceUrl + GET_USER_BY_EMAIL_ENDPOINT + email;
+		try {
+			return restTemplate.getForEntity(
+					endpoint, UserAPIDTO.class).getBody();
+		} catch (Exception e) {
+			LOG.error("Error while fetching user {} from user service", email, e);
+			return null;
 		}
 	}
 

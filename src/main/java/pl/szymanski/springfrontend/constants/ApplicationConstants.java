@@ -31,5 +31,6 @@ public class ApplicationConstants {
     public static final String PAGE_SIZE_PARAM = "pageSize";
     public static final String ADD_USER_ENDPOINT = "/users/add";
     public static final String REGISTER_USER_ENDPOINT = "/register";
+    public static final String GET_USER_BY_EMAIL_ENDPOINT = "/users/getByEmail?email=";
   }
 }
