@@ -116,8 +116,6 @@ public class UserPageController extends AbstractPageController {
       return "addNewUser";
     }
 
-    String email = form.getEmail();
-
     try {
       if (!userFacade.addNewUser(form)) {
         addSelectedRoleToModel(form.getRoleId(), model);
