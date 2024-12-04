@@ -9,9 +9,11 @@ import org.springframework.stereotype.Component;
 import pl.szymanski.springfrontend.api.userservice.UserServiceApi;
 import pl.szymanski.springfrontend.api.userservice.converter.APIResponseConverter;
 import pl.szymanski.springfrontend.api.userservice.dto.AddUserAPIDTO;
+import pl.szymanski.springfrontend.api.userservice.dto.RegisterUserAPIDTO;
 import pl.szymanski.springfrontend.api.userservice.dto.UserAPIResponseDTO;
 import pl.szymanski.springfrontend.api.userservice.kafka.KafkaMessageService;
 import pl.szymanski.springfrontend.api.userservice.mapper.AddUserAPIDTOAddUserFormMapper;
+import pl.szymanski.springfrontend.api.userservice.mapper.RegisterUserAPIDTORegisterFormMapper;
 import pl.szymanski.springfrontend.api.userservice.mapper.UpdateUserEventEditUserFormMapper;
 import pl.szymanski.springfrontend.api.userservice.mapper.UserDTOUserAPIDTOMapper;
 import pl.szymanski.springfrontend.avro.RemoveUserEvent;
@@ -21,6 +23,7 @@ import pl.szymanski.springfrontend.dtos.UserDTO;
 import pl.szymanski.springfrontend.exceptions.DuplicatedUserException;
 import pl.szymanski.springfrontend.forms.AddUserForm;
 import pl.szymanski.springfrontend.forms.EditUserForm;
+import pl.szymanski.springfrontend.forms.RegisterForm;
 
 @Component
 @Primary
@@ -44,6 +47,9 @@ public class UserAPIFacade extends UserFacadeImpl {
 
 	@Autowired
 	private AddUserAPIDTOAddUserFormMapper addUserAPIDTOAddUserFormMapper;
+
+	@Autowired
+	private RegisterUserAPIDTORegisterFormMapper registerUserAPIDTORegisterFormMapper;
 
 	@Override
 	public Page<UserDTO> getPaginatedLibraryCustomers(Pageable pageable) {
@@ -89,8 +95,15 @@ public class UserAPIFacade extends UserFacadeImpl {
 
 	@Override
 	public boolean addNewUser(AddUserForm addUserForm) throws DuplicatedUserException {
-		AddUserAPIDTO addUserAPIDTO = addUserAPIDTOAddUserFormMapper.map(addUserForm);
+		final AddUserAPIDTO addUserAPIDTO = addUserAPIDTOAddUserFormMapper.map(addUserForm);
 
 		return userServiceApi.addUser(addUserAPIDTO);
+	}
+
+	@Override
+	public boolean registerUser(RegisterForm registerForm) throws DuplicatedUserException {
+		final RegisterUserAPIDTO registerUserAPIDTO = registerUserAPIDTORegisterFormMapper.map(registerForm);
+
+		return userServiceApi.registerUser(registerUserAPIDTO);
 	}
 }

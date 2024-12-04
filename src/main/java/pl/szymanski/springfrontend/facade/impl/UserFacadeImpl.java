@@ -98,19 +98,22 @@ public class UserFacadeImpl implements UserFacade {
   }
 
   @Override
-  public boolean registerUser(RegisterForm registerForm) {
-    final UserDTO userDTO = new UserDTO();
-    userDTO.setEmail(registerForm.getEmail());
-    userDTO.setPassword(registerForm.getPassword());
-    userDTO.setName(registerForm.getName());
-    userDTO.setLastName(registerForm.getLastName());
-    userDTO.setDayOfBirth(Date.valueOf(registerForm.getDayOfBirth()));
-    userDTO.setAddressLine1(registerForm.getAddressLine1());
-    userDTO.setTown(registerForm.getTown());
-    userDTO.setPostalCode(registerForm.getPostalCode());
-    userDTO.setPhone(registerForm.getPhone());
+  public boolean registerUser(RegisterForm registerForm) throws DuplicatedUserException {
+	  if (existsUserByEmail(registerForm.getEmail())) {
+		  throw new DuplicatedUserException("User with email " + registerForm.getEmail() + " already exists");
+	  }
+	  final UserDTO userDTO = new UserDTO();
+	  userDTO.setEmail(registerForm.getEmail());
+	  userDTO.setPassword(registerForm.getPassword());
+	  userDTO.setName(registerForm.getName());
+	  userDTO.setLastName(registerForm.getLastName());
+	  userDTO.setDayOfBirth(Date.valueOf(registerForm.getDayOfBirth()));
+	  userDTO.setAddressLine1(registerForm.getAddressLine1());
+	  userDTO.setTown(registerForm.getTown());
+	  userDTO.setPostalCode(registerForm.getPostalCode());
+	  userDTO.setPhone(registerForm.getPhone());
 
-    return userService.registerUser(userDTO);
+	  return userService.registerUser(userDTO);
   }
 
   @Override

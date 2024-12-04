@@ -26,7 +26,7 @@ public interface UserFacade {
 
   boolean delete(String id);
 
-  boolean registerUser(RegisterForm registerForm);
+  boolean registerUser(RegisterForm registerForm) throws DuplicatedUserException;
 
   boolean existsUserByEmail(String email);
 
