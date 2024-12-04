@@ -1,6 +1,7 @@
 package pl.szymanski.springfrontend.api.userservice;
 
 import pl.szymanski.springfrontend.api.userservice.dto.AddUserAPIDTO;
+import pl.szymanski.springfrontend.api.userservice.dto.RegisterUserAPIDTO;
 import pl.szymanski.springfrontend.api.userservice.dto.RoleAPIDTO;
 import pl.szymanski.springfrontend.api.userservice.dto.UserAPIDTO;
 import pl.szymanski.springfrontend.api.userservice.dto.UserAPIResponseDTO;
@@ -21,5 +22,7 @@ public interface UserServiceApi {
 	List<RoleAPIDTO> getAllRoles();
 
 	boolean addUser(AddUserAPIDTO addUserAPIDTO) throws DuplicatedUserException;
+
+	boolean registerUser(RegisterUserAPIDTO addUserAPIDTO) throws DuplicatedUserException;
 
 }

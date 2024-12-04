@@ -14,6 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import pl.szymanski.springfrontend.api.userservice.UserServiceApi;
 import pl.szymanski.springfrontend.api.userservice.dto.AddUserAPIDTO;
 import pl.szymanski.springfrontend.api.userservice.dto.PageDTO;
+import pl.szymanski.springfrontend.api.userservice.dto.RegisterUserAPIDTO;
 import pl.szymanski.springfrontend.api.userservice.dto.RoleAPIDTO;
 import pl.szymanski.springfrontend.api.userservice.dto.UserAPIDTO;
 import pl.szymanski.springfrontend.api.userservice.dto.UserAPIResponseDTO;
@@ -28,6 +29,7 @@ import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserSer
 import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.LIBRARY_CUSTOMERS_ENDPOINT;
 import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.LIBRARY_EMPLOYEES_ENDPOINT;
 import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.PAGE_SIZE_PARAM;
+import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.REGISTER_USER_ENDPOINT;
 
 @Service
 public class UserServiceApiImpl implements UserServiceApi {
@@ -93,6 +95,22 @@ public class UserServiceApiImpl implements UserServiceApi {
 		} catch (HttpClientErrorException e) {
 			if (e.getStatusCode().equals(HttpStatus.CONFLICT)) {
 				throw new DuplicatedUserException("User with email " + addUserAPIDTO.getEmail() + " already exists");
+			}
+			LOG.error("Error while adding user to user service", e);
+
+			return false;
+		}
+	}
+
+	@Override
+	public boolean registerUser(RegisterUserAPIDTO registerUserAPIDTO) throws DuplicatedUserException {
+		final String endpoint = userServiceUrl + REGISTER_USER_ENDPOINT;
+		try {
+			ResponseEntity<Void> response = restTemplate.postForEntity(endpoint, registerUserAPIDTO, Void.class);
+			return response.getStatusCode().equals(HttpStatus.CREATED);
+		} catch (HttpClientErrorException e) {
+			if (e.getStatusCode().equals(HttpStatus.CONFLICT)) {
+				throw new DuplicatedUserException("User with email " + registerUserAPIDTO.getEmail() + " already exists");
 			}
 			LOG.error("Error while adding user to user service", e);
 

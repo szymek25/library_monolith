@@ -148,14 +148,13 @@ public class UserPageController extends AbstractPageController {
       return "addNewCustomer";
     }
 
-    String email = form.getEmail();
-    if (!StringUtils.isEmpty(email) && userFacade.existsUserByEmail(email)) {
+    try {
+      userFacade.registerUser(form);
+    } catch (DuplicatedUserException e) {
       result.rejectValue("email", "users.add.userExists");
 
       return "addNewCustomer";
     }
-
-    userFacade.registerUser(form);
 
     return REDIRECT_PREFIX + "/users/list";
   }
