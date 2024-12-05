@@ -4,7 +4,7 @@ import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.StringSerializer;
+import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -65,35 +65,35 @@ public class KafkaConfig {
 
 
 	@Bean
-	public ProducerFactory<String, UpdateUserEvent> updateUserProducerFactory() {
+	public ProducerFactory<Integer, UpdateUserEvent> updateUserProducerFactory() {
 		Map<String, Object> configProps = avroConfigProps();
 		return new DefaultKafkaProducerFactory<>(configProps);
 	}
 
 	@Bean
-	public KafkaTemplate<String, UpdateUserEvent> updateUserKafkaTemplate() {
+	public KafkaTemplate<Integer, UpdateUserEvent> updateUserKafkaTemplate() {
 		return new KafkaTemplate<>(updateUserProducerFactory());
 	}
 
 	@Bean
-	public ProducerFactory<String, RemoveUserEvent> removeUserProducerFactory() {
+	public ProducerFactory<Integer, RemoveUserEvent> removeUserProducerFactory() {
 		Map<String, Object> configProps = avroConfigProps();
 		return new DefaultKafkaProducerFactory<>(configProps);
 	}
 
 	@Bean
-	public KafkaTemplate<String, RemoveUserEvent> removeUserKafkaTemplate() {
+	public KafkaTemplate<Integer, RemoveUserEvent> removeUserKafkaTemplate() {
 		return new KafkaTemplate<>(removeUserProducerFactory());
 	}
 
 	@Bean
-	public ProducerFactory<String, UpdatePasswordEvent> updatePasswordProducerFactory() {
+	public ProducerFactory<Integer, UpdatePasswordEvent> updatePasswordProducerFactory() {
 		Map<String, Object> configProps = avroConfigProps();
 		return new DefaultKafkaProducerFactory<>(configProps);
 	}
 
 	@Bean
-	public KafkaTemplate<String, UpdatePasswordEvent> updatePasswordKafkaTemplate() {
+	public KafkaTemplate<Integer, UpdatePasswordEvent> updatePasswordKafkaTemplate() {
 		return new KafkaTemplate<>(updatePasswordProducerFactory());
 	}
 
@@ -104,7 +104,7 @@ public class KafkaConfig {
 				bootstrapAddress);
 		configProps.put(
 				ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
-				StringSerializer.class);
+				IntegerSerializer.class);
 		configProps.put(
 				ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
 				KafkaAvroSerializer.class);

@@ -7,5 +7,5 @@ import pl.szymanski.springfrontend.forms.EditUserForm;
 @Mapper(componentModel = "spring")
 public interface  UpdateUserEventEditUserFormMapper {
 
-	UpdateUserEvent map(EditUserForm form, String id);
+	UpdateUserEvent map(EditUserForm form, int id);
 }

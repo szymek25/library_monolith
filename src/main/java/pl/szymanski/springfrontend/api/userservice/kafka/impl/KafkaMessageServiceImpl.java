@@ -18,13 +18,13 @@ public class KafkaMessageServiceImpl implements KafkaMessageService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(KafkaMessageServiceImpl.class);
 	@Autowired
-	private KafkaTemplate<String, UpdateUserEvent> kafkaTemplateUpdateUser;
+	private KafkaTemplate<Integer, UpdateUserEvent> kafkaTemplateUpdateUser;
 
 	@Autowired
-	private KafkaTemplate<String, RemoveUserEvent> kafkaTemplateRemoveUser;
+	private KafkaTemplate<Integer, RemoveUserEvent> kafkaTemplateRemoveUser;
 
 	@Autowired
-	private KafkaTemplate<String, UpdatePasswordEvent> kafkaTemplateUpdatePassword;
+	private KafkaTemplate<Integer, UpdatePasswordEvent> kafkaTemplateUpdatePassword;
 
 	@Value("${library.kafka.topics.user-updates}")
 	private String userUpdatesTopic;
@@ -37,19 +37,19 @@ public class KafkaMessageServiceImpl implements KafkaMessageService {
 
 	@Override
 	public void sendUserUpdateMessage(UpdateUserEvent event) {
-		ListenableFuture<SendResult<String, UpdateUserEvent>> send = kafkaTemplateUpdateUser.send(userUpdatesTopic, event.getId(), event);
+		ListenableFuture<SendResult<Integer, UpdateUserEvent>> send = kafkaTemplateUpdateUser.send(userUpdatesTopic, event.getId(), event);
 		send.addCallback(result -> LOG.debug("Sent message: {}", result), ex -> LOG.error("Failed to send message", ex));
 	}
 
 	@Override
 	public void sendUserDeleteMessage(RemoveUserEvent event) {
-		ListenableFuture<SendResult<String, RemoveUserEvent>> send = kafkaTemplateRemoveUser.send(userRemovesTopic, event.getId(), event);
+		ListenableFuture<SendResult<Integer, RemoveUserEvent>> send = kafkaTemplateRemoveUser.send(userRemovesTopic, event.getId(), event);
 		send.addCallback(result -> LOG.debug("Sent message: {}", result), ex -> LOG.error("Failed to send message", ex));
 	}
 
 	@Override
 	public void sendUpdatePasswordMessage(UpdatePasswordEvent event) {
-		ListenableFuture<SendResult<String, UpdatePasswordEvent>> send = kafkaTemplateUpdatePassword.send(updatePasswordTopic, event.getId(), event);
+		ListenableFuture<SendResult<Integer, UpdatePasswordEvent>> send = kafkaTemplateUpdatePassword.send(updatePasswordTopic, event.getId(), event);
 		send.addCallback(result -> LOG.debug("Sent message: {}", result), ex -> LOG.error("Failed to send message", ex));
 	}
 }

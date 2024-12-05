@@ -60,9 +60,6 @@
                 </sec:authorize>
                 <td>
                   <c:set var="userId" value="${user.id}"/>
-                  <c:if test="${userServiceEnabled}">
-                    <c:set var="userId" value="${user.keycloakId}"/>
-                  </c:if>
                   <sec:authorize access="hasRole('EMPLOYEE')">
                     <a target="_blank" href="/users/printUserLabel/${userId}" class="btn btn-primary btn-block">
                       <spring:message code="users.list.table.actions.print"/>

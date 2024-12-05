@@ -70,25 +70,25 @@ public class UserAPIFacade extends UserFacadeImpl {
 	}
 
 	@Override
-	public UserDTO getUserById(final String id) {
-		return userDTOUserAPIDTOMapper.map(userServiceApi.getUserById(id));
+	public UserDTO getUserById(final int id) {
+		return userDTOUserAPIDTOMapper.map(userServiceApi.getUserById(String.valueOf(id)));
 	}
 
 	@Override
-	public boolean updateUser(final String id, final EditUserForm editUserForm) {
+	public boolean updateUser(final int id, final EditUserForm editUserForm) {
 		final UpdateUserEvent updateUserEvent = updateUserEventEditUserFormMapper.map(editUserForm, id);
 		kafkaMessageService.sendUserUpdateMessage(updateUserEvent);
 		return true;
 	}
 
 	@Override
-	public boolean delete(String id) {
+	public boolean delete(int id) {
 		kafkaMessageService.sendUserDeleteMessage(new RemoveUserEvent(id));
 		return true;
 	}
 
 	@Override
-	public boolean updateUserPassword(String userId, String password) {
+	public boolean updateUserPassword(int userId, String password) {
 		kafkaMessageService.sendUpdatePasswordMessage(new UpdatePasswordEvent(userId, password));
 		return true;
 	}

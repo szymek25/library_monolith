@@ -43,13 +43,13 @@ public class UserFacadeImpl implements UserFacade {
   }
 
   @Override
-  public UserDTO getUserById(String id) {
-    User user = userService.getUserById(Integer.parseInt(id));
+  public UserDTO getUserById(int id) {
+    User user = userService.getUserById(id);
     return user != null ? new UserDTO(user) : null;
   }
 
   @Override
-  public boolean updateUser(final String id, final EditUserForm editUserForm) {
+  public boolean updateUser(final int id, final EditUserForm editUserForm) {
     final UserDTO userDTO = new UserDTO();
     userDTO.setEmail(editUserForm.getEmail());
     userDTO.setName(editUserForm.getName());
@@ -60,12 +60,12 @@ public class UserFacadeImpl implements UserFacade {
     userDTO.setTown(editUserForm.getTown());
     userDTO.setPostalCode(editUserForm.getPostalCode());
     userDTO.setPhone(editUserForm.getPhone());
-    return userService.updateUser(Integer.parseInt(id), userDTO);
+    return userService.updateUser(id, userDTO);
   }
 
   @Override
-  public boolean updateUserPassword(String userId, String password) {
-    return userService.updateUserPassword(Integer.parseInt(userId), password);
+  public boolean updateUserPassword(int userId, String password) {
+    return userService.updateUserPassword(userId, password);
   }
 
   @Override
@@ -93,8 +93,8 @@ public class UserFacadeImpl implements UserFacade {
   }
 
   @Override
-  public boolean delete(String id) {
-    return userService.delete(Integer.parseInt(id));
+  public boolean delete(int id) {
+    return userService.delete(id);
   }
 
   @Override

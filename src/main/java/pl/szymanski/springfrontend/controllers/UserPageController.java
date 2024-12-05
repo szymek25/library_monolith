@@ -1,11 +1,5 @@
 package pl.szymanski.springfrontend.controllers;
 
-import java.io.ByteArrayInputStream;
-import java.sql.Date;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Optional;
-import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +34,13 @@ import pl.szymanski.springfrontend.forms.RegisterForm;
 import pl.szymanski.springfrontend.forms.UpdatePasswordForm;
 import pl.szymanski.springfrontend.pdf.GeneratePDFUtil;
 
+import javax.validation.Valid;
+import java.io.ByteArrayInputStream;
+import java.sql.Date;
+import java.util.Arrays;
+import java.util.Locale;
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/users")
 public class UserPageController extends AbstractPageController {
@@ -73,7 +74,7 @@ public class UserPageController extends AbstractPageController {
     return "users";
   }
 
-  @PreAuthorize("hasRole('ROLE_MANAGER')")
+  @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_EMPLOYEE')")
   @RequestMapping(value = "list", method = RequestMethod.POST)
   public String findUserByBarCode(@RequestParam("barcode") final String barcode,
       final Model model, final RedirectAttributes redirect) {
@@ -85,7 +86,7 @@ public class UserPageController extends AbstractPageController {
       addFlashErrorMessage("search.with.barcode.invalidBarcode", redirect);
       return REDIRECT_PREFIX + "/users/list";
     }
-    final UserDTO user = userFacade.getUserById(String.valueOf(decodedBarcode));
+    final UserDTO user = userFacade.getUserById(decodedBarcode);
     if (user == null) {
       addFlashErrorMessage("users.list.findUser.notFound", redirect);
       return REDIRECT_PREFIX + "/users/list";
@@ -161,7 +162,7 @@ public class UserPageController extends AbstractPageController {
 
   @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
   @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_EMPLOYEE')")
-  public String editUserView(@PathVariable("id") Optional<String> id, Model model) {
+  public String editUserView(@PathVariable("id") Optional<Integer> id, Model model) {
     if (id.isPresent()) {
       UserDTO user = userFacade.getUserById(id.get());
       if (user == null) {
@@ -199,7 +200,7 @@ public class UserPageController extends AbstractPageController {
 
   @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
   @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_EMPLOYEE')")
-  public String editUser(@PathVariable("id") Optional<String> id,
+  public String editUser(@PathVariable("id") Optional<Integer> id,
       @ModelAttribute("editUserForm") final @Valid EditUserForm form,
       final BindingResult result, final Model model) {
 
@@ -207,7 +208,7 @@ public class UserPageController extends AbstractPageController {
       return REDIRECT_PREFIX + "/users/list";
     }
 
-    final String userId = id.get();
+    final Integer userId = id.get();
     final UserDTO user = userFacade.getUserById(userId);
 
     if (result.hasErrors()) {
@@ -238,14 +239,14 @@ public class UserPageController extends AbstractPageController {
     return REDIRECT_PREFIX + "/users/list";
   }
 
-  private void addUpdatePasswordForm(Optional<String> id, Model model) {
+  private void addUpdatePasswordForm(Optional<Integer> id, Model model) {
     model.addAttribute("updatePasswordForm", new UpdatePasswordForm());
     model.addAttribute("userId", id.get());
   }
 
   @RequestMapping(value = "/edit/{id}/updatePassword", method = RequestMethod.POST)
   @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_MANAGER')")
-  public String updatePassword(@PathVariable("id") Optional<String> id,
+  public String updatePassword(@PathVariable("id") Optional<Integer> id,
       @ModelAttribute("updatePasswordForm") final @Valid UpdatePasswordForm form,
       final BindingResult result, final Model model) {
 
@@ -253,10 +254,10 @@ public class UserPageController extends AbstractPageController {
       return REDIRECT_PREFIX + "/users/list";
     }
 
-    final String userId = id.get();
+    final Integer userId = id.get();
 
     if (result.hasErrors()) {
-      EditUserForm userForm = prepareEditUserForm(userFacade.getUserById(String.valueOf(id.get())));
+      EditUserForm userForm = prepareEditUserForm(userFacade.getUserById(userId));
       model.addAttribute("editUserForm", userForm);
       model.addAttribute("userId", id.get());
       addSelectedRoleToModel(userForm.getRoleId(), model);
@@ -271,7 +272,7 @@ public class UserPageController extends AbstractPageController {
 
   @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
   @PreAuthorize("hasRole('ROLE_MANAGER')")
-  public String deleteUser(@PathVariable("id") final Optional<String> id) {
+  public String deleteUser(@PathVariable("id") final Optional<Integer> id) {
     if (!id.isPresent()) {
       return REDIRECT_PREFIX + "/users/list";
     }
@@ -285,7 +286,7 @@ public class UserPageController extends AbstractPageController {
   @RequestMapping(value = "/printUserLabel/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_PDF_VALUE)
   public ResponseEntity<InputStreamResource> printUserLabel(final Locale locale,
       @PathVariable("id") final int id) {
-    final UserDTO userDTO = userFacade.getUserById(String.valueOf(id));
+    final UserDTO userDTO = userFacade.getUserById(id);
     ByteArrayInputStream bis = generatePDFUtil.generateUserLabel(userDTO, locale);
 
     HttpHeaders headers = new HttpHeaders();

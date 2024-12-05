@@ -16,15 +16,15 @@ public interface UserFacade {
 
   Page<UserDTO> getPaginatedLibraryEmployees(Pageable pageable);
 
-  UserDTO getUserById(String id);
+  UserDTO getUserById(int id);
 
-  boolean updateUser(String id, EditUserForm editUserForm);
+  boolean updateUser(int id, EditUserForm editUserForm);
 
-  boolean updateUserPassword(String userId, String password);
+  boolean updateUserPassword(int userId, String password);
 
   boolean addNewUser(AddUserForm userForm) throws DuplicatedUserException;
 
-  boolean delete(String id);
+  boolean delete(int id);
 
   boolean registerUser(RegisterForm registerForm) throws DuplicatedUserException;
 
