@@ -3,6 +3,7 @@ package pl.szymanski.springfrontend.facade;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import pl.szymanski.springfrontend.dtos.UserDTO;
+import pl.szymanski.springfrontend.exceptions.DuplicatedUserException;
 import pl.szymanski.springfrontend.forms.AddUserForm;
 import pl.szymanski.springfrontend.forms.EditUserForm;
 import pl.szymanski.springfrontend.forms.RegisterForm;
@@ -21,11 +22,11 @@ public interface UserFacade {
 
   boolean updateUserPassword(int userId, String password);
 
-  boolean addNewUser(AddUserForm userForm);
+  boolean addNewUser(AddUserForm userForm) throws DuplicatedUserException;
 
   boolean delete(int id);
 
-  boolean registerUser(RegisterForm registerForm);
+  boolean registerUser(RegisterForm registerForm) throws DuplicatedUserException;
 
   boolean existsUserByEmail(String email);
 

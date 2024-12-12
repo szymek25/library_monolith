@@ -1,16 +1,17 @@
 package pl.szymanski.springfrontend.controllers;
 
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import pl.szymanski.springfrontend.exceptions.DuplicatedUserException;
 import pl.szymanski.springfrontend.facade.UserFacade;
 import pl.szymanski.springfrontend.forms.RegisterForm;
+
+import javax.validation.Valid;
 
 @Controller
 public class RegisterController extends AbstractPageController {
@@ -32,19 +33,18 @@ public class RegisterController extends AbstractPageController {
       return "register";
     }
 
-    String email = form.getEmail();
-    if (!StringUtils.isEmpty(email) && userFacade.existsUserByEmail(email)) {
+
+    try {
+      if (userFacade.registerUser(form)) {
+        addGlobalConfMessage("register.success", model);
+      } else {
+        addGlobalConfMessage("register.failed", model);
+      }
+    } catch (DuplicatedUserException e) {
       addGlobalErrorMessage("register.userExists", model);
 
       return "register";
     }
-
-    if (userFacade.registerUser(form)) {
-      addGlobalConfMessage("register.success", model);
-    } else {
-      addGlobalConfMessage("register.failed", model);
-    }
-
-    return "login";
+    return "home";
   }
 }

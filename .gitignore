@@ -1,3 +1,4 @@
 /target
 .idea
 kube/db
+kube/user-service-db

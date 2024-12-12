@@ -72,7 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.csrf().disable()
 				.authorizeRequests()
 				.antMatchers("/anonymous*").anonymous()
-				.antMatchers("/webjars/**", "/css/**", "/js/**", "/actuator/**", "/").permitAll()
+				.antMatchers("/webjars/**", "/css/**", "/js/**", "/actuator/**", "/", "/register").permitAll()
 				.anyRequest().authenticated();
 
 		http.oauth2ResourceServer().jwt();

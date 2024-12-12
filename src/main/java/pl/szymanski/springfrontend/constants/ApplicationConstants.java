@@ -22,4 +22,17 @@ public class ApplicationConstants {
     public static final String POSTAL_CODE = "postalCode";
     public static final String UUID = "sub";
   }
+
+  public class UserService {
+    public static final String LIBRARY_CUSTOMERS_ENDPOINT = "/users/customers";
+    public static final String LIBRARY_EMPLOYEES_ENDPOINT = "/users/employees";
+    public static final String ALL_USERS_ENDPOINT = "/users";
+    public static final String CURRENT_PAGE_PARAM = "currentPage";
+    public static final String PAGE_SIZE_PARAM = "pageSize";
+    public static final String ADD_USER_ENDPOINT = "/users/add";
+    public static final String REGISTER_USER_ENDPOINT = "/register";
+    public static final String GET_USER_BY_EMAIL_ENDPOINT = "/users/getByEmail?email=";
+    public static final String ROLES_ENDPOINT = "/roles";
+    public static final String USERS_ENDPOINT = "/users/";
+  }
 }

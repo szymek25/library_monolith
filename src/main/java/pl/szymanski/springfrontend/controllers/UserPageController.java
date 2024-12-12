@@ -1,11 +1,5 @@
 package pl.szymanski.springfrontend.controllers;
 
-import java.io.ByteArrayInputStream;
-import java.sql.Date;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Optional;
-import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +25,7 @@ import pl.szymanski.springfrontend.barcode.BarcodeDecoder;
 import pl.szymanski.springfrontend.constants.ApplicationConstants;
 import pl.szymanski.springfrontend.dtos.UserDTO;
 import pl.szymanski.springfrontend.exceptions.BarcodeDecodingException;
+import pl.szymanski.springfrontend.exceptions.DuplicatedUserException;
 import pl.szymanski.springfrontend.facade.RoleFacade;
 import pl.szymanski.springfrontend.facade.UserFacade;
 import pl.szymanski.springfrontend.forms.AddUserForm;
@@ -38,6 +33,13 @@ import pl.szymanski.springfrontend.forms.EditUserForm;
 import pl.szymanski.springfrontend.forms.RegisterForm;
 import pl.szymanski.springfrontend.forms.UpdatePasswordForm;
 import pl.szymanski.springfrontend.pdf.GeneratePDFUtil;
+
+import javax.validation.Valid;
+import java.io.ByteArrayInputStream;
+import java.sql.Date;
+import java.util.Arrays;
+import java.util.Locale;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/users")
@@ -72,7 +74,7 @@ public class UserPageController extends AbstractPageController {
     return "users";
   }
 
-  @PreAuthorize("hasRole('ROLE_MANAGER')")
+  @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_EMPLOYEE')")
   @RequestMapping(value = "list", method = RequestMethod.POST)
   public String findUserByBarCode(@RequestParam("barcode") final String barcode,
       final Model model, final RedirectAttributes redirect) {
@@ -115,17 +117,16 @@ public class UserPageController extends AbstractPageController {
       return "addNewUser";
     }
 
-    String email = form.getEmail();
-    if (!StringUtils.isEmpty(email) && userFacade.existsUserByEmail(email)) {
+    try {
+      if (!userFacade.addNewUser(form)) {
+        addSelectedRoleToModel(form.getRoleId(), model);
+        addGlobalErrorMessage("users.add.error", model);
+
+        return "addNewUser";
+      }
+    } catch (DuplicatedUserException e) {
       addSelectedRoleToModel(form.getRoleId(), model);
       addGlobalErrorMessage("users.add.userExists", model);
-
-      return "addNewUser";
-    }
-
-    if (!userFacade.addNewUser(form)) {
-      addSelectedRoleToModel(form.getRoleId(), model);
-      addGlobalErrorMessage("users.add.error", model);
 
       return "addNewUser";
     }
@@ -148,14 +149,13 @@ public class UserPageController extends AbstractPageController {
       return "addNewCustomer";
     }
 
-    String email = form.getEmail();
-    if (!StringUtils.isEmpty(email) && userFacade.existsUserByEmail(email)) {
+    try {
+      userFacade.registerUser(form);
+    } catch (DuplicatedUserException e) {
       result.rejectValue("email", "users.add.userExists");
 
       return "addNewCustomer";
     }
-
-    userFacade.registerUser(form);
 
     return REDIRECT_PREFIX + "/users/list";
   }
@@ -208,7 +208,7 @@ public class UserPageController extends AbstractPageController {
       return REDIRECT_PREFIX + "/users/list";
     }
 
-    final int userId = id.get();
+    final Integer userId = id.get();
     final UserDTO user = userFacade.getUserById(userId);
 
     if (result.hasErrors()) {
@@ -254,10 +254,10 @@ public class UserPageController extends AbstractPageController {
       return REDIRECT_PREFIX + "/users/list";
     }
 
-    final int userId = id.get();
+    final Integer userId = id.get();
 
     if (result.hasErrors()) {
-      EditUserForm userForm = prepareEditUserForm(userFacade.getUserById(id.get()));
+      EditUserForm userForm = prepareEditUserForm(userFacade.getUserById(userId));
       model.addAttribute("editUserForm", userForm);
       model.addAttribute("userId", id.get());
       addSelectedRoleToModel(userForm.getRoleId(), model);
@@ -271,7 +271,7 @@ public class UserPageController extends AbstractPageController {
   }
 
   @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
-  @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+  @PreAuthorize("hasRole('ROLE_MANAGER')")
   public String deleteUser(@PathVariable("id") final Optional<Integer> id) {
     if (!id.isPresent()) {
       return REDIRECT_PREFIX + "/users/list";

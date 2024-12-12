@@ -1,10 +1,5 @@
 package pl.szymanski.springfrontend.controllers;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +9,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.szymanski.springfrontend.facade.OrderFacade;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public abstract class AbstractPageController {
 
@@ -30,6 +31,7 @@ public abstract class AbstractPageController {
   public int newOrdersCount() {
     return orderFacade.countNewOrders();
   }
+
 
   protected void addPaginationResult(final Integer currentPage, final String modelAttributeName,
       final Page pageableResult, final Model model) {

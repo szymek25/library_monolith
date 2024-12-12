@@ -40,50 +40,57 @@
       </form>
     </div>
   </div>
-  <div class="row">
-    <div class="col">
-      <table class="table">
-        <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">
-            <spring:message code="rents.users.list.table.email"/>
-          </th>
-          <th scope="col">
-            <spring:message code="rents.users.list.table.name"/>
-          </th>
-          <th scope="col">
-            <spring:message code="rents.users.list.table.lastName"/>
-          </th>
-          <th scope="col">
-            <spring:message code="rents.users.list.table.dayOfBirth"/>
-          </th>
-          <th scope="col">
-            <spring:message code="rents.users.list.table.actions"/>
-          </th>
-        </tr>
-        </thead>
-        <c:forEach items="${users}" var="user">
-          <tr>
-            <th scope="row">${user.id}</th>
-            <td>${user.email}</td>
-            <td>${user.name}</td>
-            <td>${user.lastName}</td>
-            <td>${user.dayOfBirth}</td>
-            <td>
-              <form action="/rents/createRent" method="POST">
-                <input type="hidden" name="userId" value="${user.id}"/>
-                <input type="hidden" name="bookEntryId" value="${bookEntry.id}"/>
-                <button class="btn btn-primary btn-block" type="submit">
-                  <spring:message code="rents.users.list.table.actions.select"/>
-                </button>
-              </form>
-            </td>
-          </tr>
-        </c:forEach>
-        </tbody>
-      </table>
-      <t:paginator pages="${pages}" current="${currentPage}"/>
-    </div>
-  </div>
+  <c:choose>
+    <c:when test="${empty users}">
+      <spring:message code="rents.users.list.table.empty"/>
+    </c:when>
+    <c:otherwise>
+      <div class="row">
+        <div class="col">
+          <table class="table">
+            <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">
+                <spring:message code="rents.users.list.table.email"/>
+              </th>
+              <th scope="col">
+                <spring:message code="rents.users.list.table.name"/>
+              </th>
+              <th scope="col">
+                <spring:message code="rents.users.list.table.lastName"/>
+              </th>
+              <th scope="col">
+                <spring:message code="rents.users.list.table.dayOfBirth"/>
+              </th>
+              <th scope="col">
+                <spring:message code="rents.users.list.table.actions"/>
+              </th>
+            </tr>
+            </thead>
+            <c:forEach items="${users}" var="user">
+              <tr>
+                <th scope="row">${user.id}</th>
+                <td>${user.email}</td>
+                <td>${user.name}</td>
+                <td>${user.lastName}</td>
+                <td>${user.dayOfBirth}</td>
+                <td>
+                  <form action="/rents/createRent" method="POST">
+                    <input type="hidden" name="userId" value="${user.id}"/>
+                    <input type="hidden" name="bookEntryId" value="${bookEntry.id}"/>
+                    <button class="btn btn-primary btn-block" type="submit">
+                      <spring:message code="rents.users.list.table.actions.select"/>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            </c:forEach>
+            </tbody>
+          </table>
+          <t:paginator pages="${pages}" current="${currentPage}"/>
+        </div>
+      </div>
+    </c:otherwise>
+  </c:choose>
 </t:page>

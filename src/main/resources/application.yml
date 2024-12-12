@@ -57,3 +57,15 @@ keycloak:
   baseUrl: ${keycloak.serverUrl}/realms/${keycloak.realm}
   localHostBaseUrl: ${keycloak.serverLocalUrl}/realms/${keycloak.realm}
   usersEndpoint: ${keycloak.serverUrl}/admin/realms/${keycloak.realm}/users/
+library:
+  api-gateway-url: http://apigateway:8081
+  user-service-path: /user-service
+  user-service-request-url: ${library.api-gateway-url}${library.user-service-path}
+  user-service-enabled: true
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    topics:
+      user-updates: user-updates
+      user-removes: user-removes
+      update-password: update-password
+    schema-registry-url-key: ${SCHEMA_REGISTRY_URL}

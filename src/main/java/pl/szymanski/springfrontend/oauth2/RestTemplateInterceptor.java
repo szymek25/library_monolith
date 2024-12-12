@@ -28,10 +28,11 @@ public class RestTemplateInterceptor implements ClientHttpRequestInterceptor {
 	public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
 
 		final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		final OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
-		final OAuth2AuthorizedClient oAuth2AuthorizedClient = clientService.loadAuthorizedClient(oauthToken.getAuthorizedClientRegistrationId(), oauthToken.getName());
-		request.getHeaders().add(HttpHeaders.AUTHORIZATION, "Bearer " + oAuth2AuthorizedClient.getAccessToken().getTokenValue());
-
+		if (authentication instanceof OAuth2AuthenticationToken) {
+			final OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
+			final OAuth2AuthorizedClient oAuth2AuthorizedClient = clientService.loadAuthorizedClient(oauthToken.getAuthorizedClientRegistrationId(), oauthToken.getName());
+			request.getHeaders().add(HttpHeaders.AUTHORIZATION, "Bearer " + oAuth2AuthorizedClient.getAccessToken().getTokenValue());
+		}
 		return execution.execute(request, body);
 
 	}

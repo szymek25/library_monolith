@@ -1,10 +1,5 @@
 package pl.szymanski.springfrontend.service.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,9 +18,13 @@ import pl.szymanski.springfrontend.dao.UserDao;
 import pl.szymanski.springfrontend.dtos.UserDTO;
 import pl.szymanski.springfrontend.model.Role;
 import pl.szymanski.springfrontend.model.User;
-import pl.szymanski.springfrontend.service.KeyCloakService;
 import pl.szymanski.springfrontend.service.RoleService;
 import pl.szymanski.springfrontend.service.UserService;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 
 @Service(value = "userService")
@@ -37,9 +36,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
   @Autowired
   RoleService roleService;
-
-  @Autowired
-  private KeyCloakService keyCloakService;
 
   public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
     User user = userDao.findByEmail(userId);
@@ -114,7 +110,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     try {
       updateUser(updateUserDto, user);
-      sendUpdatesToKeycloak(user);
       userDao.save(user);
     } catch (Exception e) {
       LOGGER.error("Error while updating user", e);
@@ -122,10 +117,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     return true;
-  }
-
-  private void sendUpdatesToKeycloak(User user) {
-    keyCloakService.updateUser(user);
   }
 
   @Override
@@ -213,7 +204,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
   }
 
   private void setRole(UserDTO userDTO, User user) throws Exception {
-    Role role = roleService.getById(userDTO.getRoleId());
+    Role role = roleService.getById(Long.parseLong(userDTO.getRoleId()));
     if (role == null) {
       throw new Exception("Didn`t find user role with id: " + userDTO.getRoleId());
     }
