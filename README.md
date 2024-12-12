@@ -13,6 +13,8 @@ For training purposes I have created local k8s cluster using minikube. To deploy
 
 App should be accessible in browser under http://localhost
 
+Additionally, you could check kafka queues by accessing control center under http://localhost:9021/
+
 ## Migration steps
 Here you can find steps which I have taken to migrate monolithic app into microservices architecture:
 1. Introduced docker and kubernetes configs for easier development and deployment
@@ -20,6 +22,8 @@ Here you can find steps which I have taken to migrate monolithic app into micros
 3. Migrated authentication from monolithic app into keycloak
 4. Started migrating other functionalities related with user management. After some time turned out that it requires introducing some additional logic in monolithic app, so I decided to create new microservice for user management 
 5. Introduced api-gateway component
+6. Introduced kafka for async communication
+7. Introduced and implemented user-service for user management
 
 
 ## Other repositories in project
@@ -27,11 +31,12 @@ Here you can find steps which I have taken to migrate monolithic app into micros
 2. user-service - https://github.com/szymek25/user-service
 
 ## Next steps
-1. Finish implementation of user-service
-2. Introduce kafka for async communication
-3. Introduce service-discovery
-4. Introduce service for depertments and book
-5. Introduce service for orders
-6. Contract testing
-7. Monitoring on ELK stack or some other
-8. Deploy into cloud
+1. Introduce service-discovery
+2. Introduce service for depertments and book
+3. Introduce service for orders
+4. Contract testing
+5. Monitoring on ELK stack or some other
+6. Deploy into cloud
+
+## Brief overview of user-management
+All user data is kept in keycloak server. Keycloak server is also authorization source in the system. However, user-service also keeps user data for faster access. Once library monolith app query for user data, then user-service serves data from its own DB. If some updates are done directly in keycloak system, then keycloak generates events into queue and user-service updates data. user-service is intermediate layer between keycloak and library app. So, for each user specific operations user-service exposes endpoints or listen for events in kafka. Once user-service receives event/request then sends http request into keycloak. Once operation completed by keycloak side, then keycloak emits proper event and user-service updates its own DB state. 
