@@ -38,18 +38,18 @@ public class KafkaMessageServiceImpl implements KafkaMessageService {
 	@Override
 	public void sendUserUpdateMessage(UpdateUserEvent event) {
 		ListenableFuture<SendResult<Integer, UpdateUserEvent>> send = kafkaTemplateUpdateUser.send(userUpdatesTopic, event.getId(), event);
-		send.addCallback(result -> LOG.debug("Sent message: {}", result), ex -> LOG.error("Failed to send message", ex));
+		send.addCallback(result -> LOG.debug("Sent UpdateUserEvent message: {}", result), ex -> LOG.error("Failed to send UpdateUserEvent message", ex));
 	}
 
 	@Override
 	public void sendUserDeleteMessage(RemoveUserEvent event) {
 		ListenableFuture<SendResult<Integer, RemoveUserEvent>> send = kafkaTemplateRemoveUser.send(userRemovesTopic, event.getId(), event);
-		send.addCallback(result -> LOG.debug("Sent message: {}", result), ex -> LOG.error("Failed to send message", ex));
+		send.addCallback(result -> LOG.debug("Sent RemoveUserEvent message: {}", result), ex -> LOG.error("Failed to send RemoveUserEvent message", ex));
 	}
 
 	@Override
 	public void sendUpdatePasswordMessage(UpdatePasswordEvent event) {
 		ListenableFuture<SendResult<Integer, UpdatePasswordEvent>> send = kafkaTemplateUpdatePassword.send(updatePasswordTopic, event.getId(), event);
-		send.addCallback(result -> LOG.debug("Sent message: {}", result), ex -> LOG.error("Failed to send message", ex));
+		send.addCallback(result -> LOG.debug("Sent UpdatePasswordEvent message: {}", result), ex -> LOG.error("Failed to send UpdatePasswordEvent message", ex));
 	}
 }

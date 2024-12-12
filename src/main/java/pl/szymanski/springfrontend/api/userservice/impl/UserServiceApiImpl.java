@@ -31,6 +31,8 @@ import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserSer
 import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.LIBRARY_EMPLOYEES_ENDPOINT;
 import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.PAGE_SIZE_PARAM;
 import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.REGISTER_USER_ENDPOINT;
+import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.ROLES_ENDPOINT;
+import static pl.szymanski.springfrontend.constants.ApplicationConstants.UserService.USERS_ENDPOINT;
 
 @Service
 public class UserServiceApiImpl implements UserServiceApi {
@@ -62,7 +64,7 @@ public class UserServiceApiImpl implements UserServiceApi {
 
 	@Override
 	public UserAPIDTO getUserById(String id) {
-		final String endpoint = userServiceUrl + "/users/" + id;
+		final String endpoint = userServiceUrl + USERS_ENDPOINT + id;
 
 		try {
 			return restTemplate.getForEntity(
@@ -76,7 +78,7 @@ public class UserServiceApiImpl implements UserServiceApi {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<RoleAPIDTO> getAllRoles() {
-		final String endpoint = userServiceUrl + "/roles";
+		final String endpoint = userServiceUrl + ROLES_ENDPOINT;
 		try {
 			RoleAPIDTO[] response = restTemplate.getForEntity(
 					endpoint, RoleAPIDTO[].class).getBody();
